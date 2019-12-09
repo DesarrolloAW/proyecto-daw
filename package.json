@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://stevenaraujo98.github.io/proyecto-daw",
   "dependencies": {
-    "@material-ui/core": "^4.5.2",
+    "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.5.1",
     "canvasjs": "^1.8.1",
     "classnames": "^2.2.6",
@@ -13,6 +13,7 @@
     "intro.js": "^2.9.3",
     "intro.js-react": "^0.2.0",
     "mapbox-gl": "^1.6.0",
+    "material-table": "^1.54.1",
     "moment": "^2.24.0",
     "npm": "^6.13.1",
     "react": "^16.12.0",

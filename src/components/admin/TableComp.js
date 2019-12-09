@@ -8,6 +8,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import BasicSearch from './BasicSearch';
 const useStyles = makeStyles(theme => ({
     root: {
       width: '100%',
@@ -44,8 +45,8 @@ function getStepContent(step) {
                             />
                         </InputGroup>
                     </FormGroup>
-
-                    <Table responsive hover size="sm">
+                    <BasicSearch/>
+                    {/*<Table responsive hover size="sm">
                         <thead className="thead-dark">
                             <tr>
                             <th scope="col">Id</th>
@@ -60,14 +61,14 @@ function getStepContent(step) {
                         <tbody id="tabla" style={{background: 'white'}}>
                             <tr key={"row"}>
                                 <th scope="row">{parseInt('1',10)}</th>
-                                <td>saraujo</td>
+                                <td><a>saraujo</a></td>
                                 <td>Steven</td>
                                 <td>Araujo</td>
                                 <td>saraujo@espol.edu.ec</td>
                                 <td className="text-right">{parseInt('1',10)%2 === 0 ? 'Validator': 'Admin'}</td>
                             </tr>
                         </tbody>
-                    </Table>
+                    </Table>*/}
                     <p id="total"/>
                     
                     <nav aria-label="Page navigation example">
