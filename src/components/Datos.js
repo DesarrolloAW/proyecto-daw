@@ -1,4 +1,5 @@
 import React from 'react';
+import '../assets/css/datos.css';
 import classnames from 'classnames'
 import CanvasJSReact from './../assets/vendor/canvasjs.react';
 // react plugin used to create datetimepicker
@@ -29,7 +30,8 @@ import {
 } from "reactstrap";
 
 var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+//var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
 class Datos extends React.Component {
     constructor(args) {
         super(args);
@@ -70,71 +72,363 @@ class Datos extends React.Component {
         console.log(objects)
     }
 
-    plotGrafic(value){
+    graficoBarrasdeMediciones(titulo){
+        var puntos = [];
+        for(var i in this.state.observaciones){
+            var ob = this.state.observaciones[i];
+            puntos.push({y: ob.mediciones.length, label: i});
+        }
+            
+    
         var chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             exportEnabled: true,
-            theme: "light2", //"light1", "dark1", "dark2"
-            title: {
-                text: "Simple Column Chart with Index Labels"
+            theme: "light2",
+            exportFileName: titulo,
+            title:{
+                text:titulo
+            },
+            axisX:{
+                interval: 1,
+                title: "Observaciones"
+            },
+            axisY2:{
+                interlacedColor: "rgba(1,77,101,.2)",
+                gridColor: "rgba(1,77,101,.1)",
+                title: "Mediciones"
             },
             data: [{
-                type: "column", //change type to bar, line, area, pie, etc
-                //indexLabel: "{y}", //Shows y value on all Data Points
-                indexLabelFontColor: "#5A5757",
-                indexLabelPlacement: "outside",
-                dataPoints: [
-                    { x: 10, y: 71 },
-                    { x: 20, y: 55 },
-                    { x: 30, y: 50 },
-                    { x: 40, y: 65 },
-                    { x: 50, y: 71 },
-                    { x: 60, y: 68 },
-                    { x: 70, y: 38 },
-                    { x: 80, y: 92, indexLabel: "Highest" },
-                    { x: 90, y: 54 },
-                    { x: 100, y: 60 },
-                    { x: 110, y: 21 },
-                    { x: 120, y: 49 },
-                    { x: 130, y: 36 }
-                ]
+                type: "bar",
+                name: "companies",
+                axisYType: "secondary",
+                color: "#014D65",
+                dataPoints: puntos
+            }]
+        });
+        chart.render();
+    }
+    
+    graficoBarrasdeObservaciones(titulo){
+        var puntos = [];
+        var estaciones = {}
+        var newDat = this.state.observaciones;
+        for(let i in newDat){
+            if(newDat[i].estacion.id in estaciones)
+                estaciones[newDat[i].estacion.id].count += 1
+            else
+                //estaciones.newDat[i].estacion = 1
+                estaciones[newDat[i].estacion.id] = {count: 1, est: newDat[i].estacion.nombre, parr: newDat[i].estacion.Parroquia};
+        }
+        
+        for(let i in estaciones){
+            puntos.push({y: estaciones[i].count, label: estaciones[i].est + "(" + estaciones[i].parr + ")"});
+        }
+        console.log(estaciones);
+    
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            exportEnabled: true,
+            theme: "light2",
+            exportFileName: titulo,
+    
+            title:{
+                text:titulo
+            },
+            axisX:{
+                interval: 1,
+                title: "Estaciones"
+            },
+            axisY2:{
+                interlacedColor: "rgba(1,77,101,.2)",
+                gridColor: "rgba(1,77,101,.1)",
+                title: "Observaciones"
+            },
+            data: [{
+                type: "bar",
+                name: "companies",
+                axisYType: "secondary",
+                color: "#014D65",
+                dataPoints: puntos
+            }]
+        });
+        chart.render();
+    }
+    
+    graficoCircular(titulo, listaopciones, tipo) {
+        var puntos = [];
+        var inv = 0;
+        var ver = 0;
+        //var plu,spi,
+        var coll = 0
+        var sp = 0
+        var sur = 0;
+        var newDat = this.state.observaciones;
+        for(let i in newDat){
+            if(tipo === 'epoca'){
+                if(newDat[i].temporada === listaopciones[0])
+                    inv+=1
+                else
+                    ver+=1
+            }else if(tipo === 'luna'){
+                if(newDat[i].fase_lunar === listaopciones[0])
+                    inv+=1
+                else
+                    ver+=1
+            }else if(tipo === 'tipos'){
+                /*var lista = medidas[i].TipoDeOla
+                inv += lista[0]
+                ver += lista[1]
+                coll += lista[2]
+                sp += lista[3]  
+                sur += lista[4]*/
+            }
+        }
+        //.toFixed(2) a dos decimales
+        if (tipo === 'tipos'){
+            var tot = inv + ver + coll + sp + sur;
+            puntos.push({y:((inv/(tot))*100).toFixed(2), name:listaopciones[0]})
+            puntos.push({y:((ver/(tot))*100).toFixed(2), name:listaopciones[1]})
+            puntos.push({y:((coll/(tot))*100).toFixed(2), name:listaopciones[2]})
+            puntos.push({y:((sp/(tot))*100).toFixed(2), name:listaopciones[3]})
+            puntos.push({y:((sur/(tot))*100).toFixed(2), name:listaopciones[4]})
+        }else{
+            puntos.push({y:((inv/(inv+ver))*100).toFixed(2), name:listaopciones[0]/*, exploded: true  //Para que sobre salga este*/ })
+            puntos.push({y:((ver/(inv+ver))*100).toFixed(2), name:listaopciones[1]})
+        }
+    
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            exportEnabled: true,
+            theme: "light2",
+            exportFileName: titulo,
+            title: {
+                text: titulo
+            },
+            legend:{
+                cursor: "pointer",
+                itemclick: this.explodePie
+            },
+            data: [{
+                type: "pie",
+                showInLegend: true,
+                startAngle: 240,
+                toolTipContent: "{name}: <strong>{y}%</strong>",
+                indexLabel: "{name} {y}",
+                dataPoints: puntos
             }]
         });
         chart.render();
     }
 
-    render() {
-        let observaciones = this.state.observaciones
-    
-        const options = {
+    explodePie (e) {
+        if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+            e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+        } else {
+            e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+        }
+        e.chart.render();
+    }
+
+    grafico(titulo, datosx, datosy, formato, namep){
+        var puntos = [];
+        var newDat = this.state.observaciones;
+        for(let i in newDat){
+            //Corriente Litoral
+            var promedio = 0;
+            if('Velocidad promedio por Observaciones' === titulo){
+                for(var med in newDat[i].mediciones){
+                    promedio += newDat[i].mediciones[med].corriente_del_litoral["velocidad"];
+                }
+                promedio = promedio/newDat[i].mediciones.length;
+                puntos.push({label: i, y: promedio});
+            }else if('Tiempo promedio por Observaciones' === titulo){
+                for(var med in newDat[i].mediciones){
+                    promedio += newDat[i].mediciones[med].corriente_del_litoral["tiempo"];
+                }
+                promedio = promedio/newDat[i].mediciones.length;
+                puntos.push({label: i, y: promedio});
+            } else if('Espacio promedio por Observaciones' === titulo){              
+                for(var med in newDat[i].mediciones){
+                    promedio += newDat[i].mediciones[med].corriente_del_litoral["espacio"];
+                }
+                promedio = promedio/newDat[i].mediciones.length;
+                puntos.push({label: i, y: promedio});
+            
+            }
+        }
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light2", // "light1", "dark1", "dark2"
             animationEnabled: true,
             exportEnabled: true,
-            theme: "light2", //"light1", "dark1", "dark2"
-            title: {
-                text: "Simple Column Chart with Index Labels"
+            exportFileName: titulo,	
+            title:{
+                text: titulo
+            },
+            axisY: {
+                title: datosy,
+                titleFontColor: "#99A1C6",
+                //lineColor: "#4F81BC",
+                //labelFontColor: "#4F81BC",
+                tickColor: "#99A1C6"
+            },
+            axisX: {
+                title: datosx,
+            },	
+            /* Para que se muestre un cuadro con los datos
+            toolTip: {
+                shared: true
+            },*/
+            legend: {
+                cursor: "pointer",
+                itemclick: this.toggleDataSeries
+            },
+            data: [
+            {
+                // Change type to "bar", "area", "spline", "pie",etc.
+                type: "column",
+                name: namep,
+                //showInLegend: true,
+                xValueFormatString: "#",
+                yValueFormatString: "#.# "+formato,
+                dataPoints: puntos
+            },
+            {
+                type: "line",
+                name: namep,
+                showInLegend: true,
+                yValueFormatString: "#.# "+formato,
+                dataPoints: puntos
+            },
+            ]
+        });
+        chart.render();
+    }
+
+    toggleDataSeries(e) {
+        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+        } else {
+            e.dataSeries.visible = true;
+        }
+        e.chart.render();
+    }
+
+    graficoColumnas(titulo, datosx, datosy1, datosy2){
+        var puntos = [];
+        var puntos2 = [];
+        var newDat = this.state.observaciones;
+        for(var i in newDat){
+            if('Corrientes de resaca' === titulo){
+                //puntos.push({label:i, y:medidas[i].ResacaSiNo[0]})
+                //puntos2.push({label:i, y:medidas[i].ResacaSiNo[1]})
+            }
+            else if('Dirección corriente litoral' === titulo){
+                var d = 0;
+                var iz = 0;
+                for(var med in newDat[i].mediciones){
+                    if(newDat[i].mediciones[med].corriente_del_litoral["direccion"] == "D")
+                        d += 1;
+                    else
+                        iz += 1;
+                }
+                puntos.push({label:i, y: d})
+                puntos2.push({label:i, y:iz})
+            }
+        }
+    
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light2", // "light1", "dark1", "dark2"
+            animationEnabled: true,
+            exportEnabled: true,
+            exportFileName: titulo,	
+            title:{
+                text: titulo
+            },
+            axisX: {
+                title: datosx,
+            },	
+            axisY: {
+                title: datosy1,
+                titleFontColor: "#99A1C6",
+                lineColor: "#99A1C6",
+                labelFontColor: "#99A1C6",
+                tickColor: "#99A1C6"
+            },
+            axisY2: {
+                title: datosy2,
+                titleFontColor: "#86DCBD",
+                lineColor: "#86DCBD",
+                labelFontColor: "#86DCBD",
+                tickColor: "#86DCBD"
+            },	
+            toolTip: {
+                shared: true
+            },
+            legend: {
+                cursor:"pointer",
+                itemclick: this.toggleDataSeries
             },
             data: [{
-                type: "column", //change type to bar, line, area, pie, etc
-                //indexLabel: "{y}", //Shows y value on all Data Points
-                indexLabelFontColor: "#5A5757",
-                indexLabelPlacement: "outside",
-                dataPoints: [
-                    { x: 10, y: 71 },
-                    { x: 20, y: 55 },
-                    { x: 30, y: 50 },
-                    { x: 40, y: 65 },
-                    { x: 50, y: 71 },
-                    { x: 60, y: 68 },
-                    { x: 70, y: 38 },
-                    { x: 80, y: 92, indexLabel: "Highest" },
-                    { x: 90, y: 54 },
-                    { x: 100, y: 60 },
-                    { x: 110, y: 21 },
-                    { x: 120, y: 49 },
-                    { x: 130, y: 36 }
-                ]
+                type: "column",
+                name: datosy1,
+                legendText: datosy1,
+                showInLegend: true, 
+                dataPoints: puntos,
+            },
+            {
+                type: "column",	
+                name: datosy2,
+                legendText: datosy2,
+                axisYType: "secondary",
+                showInLegend: true,
+                dataPoints:puntos2,
             }]
+        });
+        chart.render();
+    }
+
+    plotGrafic(value) {
+        var textObs = 'Observaciones';
+        switch(value){
+            case "0":
+                    this.canvas.current.style.height = "0px";
+                    this.canvas.current.innerHTML = "";
+                break;
+            case "1":
+                this.canvas.current.style.height = "360px";
+                this.graficoBarrasdeMediciones('Número de mediciones');
+                break;
+            case "2":
+                this.canvas.current.style.height = "360px";
+                this.graficoBarrasdeObservaciones('Número de observaciones');
+                break;
+            case "4":
+                this.canvas.current.style.height = "360px";
+                this.graficoCircular("Fase Lunar", ['Sicigia', 'Cuadratura'], 'luna');
+                break;
+            case "5":
+                this.canvas.current.style.height = "360px";
+                this.grafico('Velocidad promedio por Observaciones', textObs, 'Velocidades promedios', 'm/s', 'Velocidad');
+                break;
+            case "6":
+                this.canvas.current.style.height = "360px";
+                this.grafico('Tiempo promedio por Observaciones', textObs, 'Tiempos promedios', 's', 'Tiempo');
+                break;
+            case "7":
+                this.canvas.current.style.height = "360px";
+                this.grafico('Espacio promedio por Observaciones', textObs, 'Distancias promedios', 'm', 'Espacio');
+                break;
+            case "8":
+                this.canvas.current.style.height = "360px";
+                this.graficoColumnas('Dirección corriente litoral', textObs, 'Derecha', 'Izquierda')
+                break;
         }
+        
+    }
+
+    render() {
+        let observaciones = this.state.observaciones
 
         return (
             <main ref="main">
@@ -455,7 +749,6 @@ class Datos extends React.Component {
                                                     <option value="0"></option>
                                                     <option value="1">Número de mediciones por observaciones</option>
                                                     <option value="2">Número de observaciones por estaciones</option>
-                                                    <option value="3">Época(Estacion climática)</option>
                                                     <option value="4">Fase Lunar</option>
                                                     <optgroup label="Corriente del litoral">
                                                         <option value="5">Velocidad promedio por Observaciones</option>
@@ -482,8 +775,8 @@ class Datos extends React.Component {
                                                 </select>
                                             </div>
 
-                                            <div className="col-12" id="chartContainer">
-                                                    <CanvasJSChart ref={this.canvas} options={options}  /* onRef={ref => this.chart = ref}*/  />
+                                            <div className="col-12" id="chartContainer" ref={this.canvas}>
+                                                    
                                             </div>
                                         </div>
                                     </TabPane>
