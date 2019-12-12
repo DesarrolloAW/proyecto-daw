@@ -756,6 +756,7 @@ class Datos extends React.Component {
                                                         <option value="7">Espacio promedio por Observaciones</option>
                                                         <option value="8">Dirección corriente litoral</option>
                                                     </optgroup>
+                                                    {/*
                                                     <option value="9">Distancia línea de playa a la rompiente de la ola por Observaciones</option>
                                                     <option value="10">Distancia línea de playa al flotador por Observaciones</option>
                                                     <option value="11">Ancho de zona de surf</option>
@@ -771,7 +772,7 @@ class Datos extends React.Component {
                                                         <option value="18">Ángulo de aproximación</option>
                                                         <option value="19">Ortogonal de las olas</option>
                                                         <option value="20">Valor promedio de altura de la rompiente</option>
-                                                    </optgroup>
+                                                    </optgroup>*/}
                                                 </select>
                                             </div>
 
