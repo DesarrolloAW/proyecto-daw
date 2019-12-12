@@ -26,9 +26,9 @@ class Observacion extends React.Component{
 						<h3 className="text-light">Observaciones</h3>
 						<Container>
 						<Row>
-						<Col  xs="auto">Provincia</Col>
+						<Col  xs="3">Provincia</Col>
 						<Col  xs="3">Canton</Col>
-						<Col  xs="2">Parroquia</Col>
+						<Col  xs="1">Parroquia</Col>
 						</Row>
 						<Row>
 						<Col  xs="auto">
@@ -68,7 +68,7 @@ class Observacion extends React.Component{
 						</Col>
 						</Row>
 						<Row>
-						<Col xs="auto">Fase Lunar</Col>
+						<Col xs="3">Fase Lunar</Col>
 						<Col xs="3">Epoca</Col>
 						</Row>
 						<Row>
