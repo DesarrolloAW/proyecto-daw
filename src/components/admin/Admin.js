@@ -3,13 +3,11 @@ import React from 'react';
 import classnames from 'classnames'
 import {Container, Col, Row, Card, CardBody, TabContent, TabPane, PaginationItem, PaginationLink, Pagination, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Table} from 'reactstrap';
 import Estacion from './Estacion';
-import TableComp from './TableComp';
-import FormUser from './FormUser';
+import StepperUsuario from './StepperUsuario';
 
-import BasicSearch from './BasicSearch'
 import { Steps, Hints } from 'intro.js-react';
 import 'intro.js/introjs.css';
-import { register } from '../../serviceWorker';
+
 
 class Admin extends React.Component{
     constructor(args){
@@ -102,21 +100,6 @@ class Admin extends React.Component{
                                     </div>
 
                                     <Card className="shadow shadow-lg--hover mt-2 cardLeft">
-                                   {/* <CardBody id="RegistarUsuario">
-                                            <div className="d-flex px-0">
-                                                <div>
-                                                    <div className="icon icon-shape bg-gradient-primary rounded-circle text-white">
-                                                        <i className="ni ni-ui-04" />
-                                                    </div>
-                                                </div>
-                                                
-                                                <div className="pl-2">
-                                                    <a className="text-warning" href="#pablo" onClick={e => this.toggleNavs(e, 0)}>
-                                                        Registar Usuarios
-                                                    </a>
-                                                </div>
-                                            </div>
-                                    </CardBody>*/}
                                         <CardBody id="tituloUsuariosAdmin">
                                             <div className="d-flex px-0">
                                                 <div>
@@ -187,15 +170,9 @@ class Admin extends React.Component{
                                 <Col className="order-lg-2 ml-lg-auto" lg="9" md="8">
                                     <div className="position-relative pl-lg-5">
                                         <TabContent activeTab={"tabs" + this.state.tabs}>
-                                            {/* Registrar Usuarios */}
-                                            <TabPane tabId="tabs0">
-                                                <FormUser/>
-                                                <BasicSearch/>
-                                            </TabPane>
-
                                             {/* Modificar Usuarios */}
                                             <TabPane tabId="tabs1">
-                                                <TableComp/>
+                                                <StepperUsuario/>
                                             </TabPane>
                                             
                                             {/* Resgistrar estacion */}
@@ -289,9 +266,9 @@ class Admin extends React.Component{
                         </Container>
 
                         {/* SVG separator */}
-                        <div className="separator separator-bottom separator-skew">
+                        <div className="separator separator-bottom separator-skew ">
                             <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" version="1.1" viewBox="0 0 2560 100" x="0" y="0" >
-                                <polygon className="fill-white" points="2560 0 2560 100 0 100" />
+                                <polygon className="fill-white" points="2560 0 0 100 0 100" />
                             </svg>
                         </div>   
                     </section>

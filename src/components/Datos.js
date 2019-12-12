@@ -23,11 +23,6 @@ import {
     NavLink,
     TabContent,
     TabPane,
-
-    Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
 } from "reactstrap";
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -424,6 +419,8 @@ class Datos extends React.Component {
                 this.canvas.current.style.height = "360px";
                 this.graficoColumnas('Dirección corriente litoral', textObs, 'Derecha', 'Izquierda')
                 break;
+            default:
+                break;
         }
         
     }
@@ -664,80 +661,7 @@ class Datos extends React.Component {
                                     {/* Tabla de datos */}
                                     <TabPane tabId="tabs1">
                                         <div id="cuadroFiltrado">
-                                            <FormGroup>
-                                                <InputGroup className={classnames("input-group-alternative mb-4", { focused: this.state.searchFocused })}>
-                                                    <InputGroupAddon addonType="prepend">
-                                                        <InputGroupText>
-                                                            <i className="fa fa-search" aria-hidden="true"></i>
-                                                        </InputGroupText>
-                                                    </InputGroupAddon>
-                                                    <Input className="form-control-alternative" placeholder="Buscar observación" type="text"
-                                                        onFocus={e => this.setState({ searchFocused: true })}
-                                                        onBlur={e => this.setState({ searchFocused: false })}
-                                                        onChange={this.updateTable.bind(this)}
-                                                    />
-                                                </InputGroup>
-                                            </FormGroup>
-                                            {/*<DataSearch/>*/}
-                                            <Table responsive hover size="sm">
-                                                <thead className="thead-dark">
-                                                    <tr>
-                                                        <th scope="col">Fecha</th>
-                                                        <th scope="col">Observador</th>
-                                                        <th scope="col">Fase Lunar</th>
-                                                        <th scope="col">Época</th>
-                                                        <th scope="col">Estación</th>
-                                                        <th scope="col" className="text-center">Cant. mediciones</th>
-                                                        <th scope="col" className="text-right">Revisión</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody id="tabla">
-                                                    {Object.keys(observaciones).map(k => (
-                                                        <tr key={"row" + k}>
-                                                            <th scope="row">{parseInt(k, 10) + 1}</th>
-                                                            <td>{observaciones[k].observador}</td>
-                                                            <td>{observaciones[k].fase_lunar}</td>
-                                                            <td>{'Verano'}</td>
-                                                            <td>{observaciones[k].estacion.nombre}</td>
-                                                            <td className="text-center">{observaciones[k].mediciones.length}</td>
-                                                            <td className="text-right">{parseInt(k, 10) % 2 === 0 ? 'True' : 'False'}</td>
-                                                        </tr>
-                                                    )
-                                                    )}
-                                                </tbody>
-                                            </Table>
-                                            <p id="total" />
-
-                                            <nav aria-label="Page navigation example">
-                                                <Pagination className="pagination justify-content-center" listClassName="justify-content-center" >
-                                                    <PaginationItem className="disabled">
-                                                        <PaginationLink href="/" onClick={e => e.preventDefault()} tabIndex="-1" >
-                                                            <i className="fa fa-angle-left" />
-                                                            <span className="sr-only">Previous</span>
-                                                        </PaginationLink>
-                                                    </PaginationItem>
-
-                                                    <PaginationItem className="active">
-                                                        <PaginationLink href="#/" onClick={e => e.preventDefault()}>
-                                                            1
-                                                        </PaginationLink>
-                                                    </PaginationItem>
-
-                                                    <PaginationItem>
-                                                        <PaginationLink href="/" onClick={e => e.preventDefault()}>
-                                                            2
-                                                        </PaginationLink>
-                                                    </PaginationItem>
-
-                                                    <PaginationItem>
-                                                        <PaginationLink href="/" onClick={e => e.preventDefault()}>
-                                                            <i className="fa fa-angle-right" />
-                                                            <span className="sr-only">Next</span>
-                                                        </PaginationLink>
-                                                    </PaginationItem>
-                                                </Pagination>
-                                            </nav>
+                                            <DataSearch/>
                                         </div>
                                     </TabPane>
 

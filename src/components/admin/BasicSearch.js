@@ -1,5 +1,5 @@
 
-import React,{forwardRef}from 'react';
+import React from 'react';
 import MaterialTable from "material-table";
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
@@ -12,11 +12,10 @@ import Add from '@material-ui/icons/Add'
 import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
+import ClearIcon from '@material-ui/icons/Clear';
+
 class BasicSearch extends React.Component {
-
-
-
-
+  
 
   render() {
 
@@ -35,6 +34,7 @@ class BasicSearch extends React.Component {
             PreviousPage: ChevronLeft,
             Search: Search,
             ThirdStateCheck: Remove,
+            Clear: ClearIcon,
         }}
           title=""
         columns={[
@@ -43,26 +43,16 @@ class BasicSearch extends React.Component {
           { title: 'Nombre', field: 'name' },
           { title: 'Apellido', field: 'apellido'},
           { title: 'Email', field: 'email' },
-          { title: 'Tipo', field: 'tipo'},
+          { title: 'Rol', field: 'rol'},
         ]}
         data={[
-          {id: '1',user:'saraujo', name: 'Steven', apellido: 'Araujo', email: 'saraujo@espol.edu.ec',tipo:'admin'},
-          {id: '2',user:'kcamba', name: 'Kenny', apellido: 'Camba', email: 'kcamba@espol.edu.ec',tipo:'admin'},
-          {id: '3',user:'chjoguer', name: 'Christian', apellido: 'Guerrero', email: 'chjoguer@espol.edu.ec',tipo:'user'},
-          {id: '4',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '5',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '6',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '7',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '8',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '9',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '10',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '11',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '12',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '13',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '14',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-          {id: '15',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',tipo:'user'},
-
-
+          {id: '1',user:'saraujo', name: 'Steven', apellido: 'Araujo', email: 'saraujo@espol.edu.ec',rol:'admin'},
+          {id: '2',user:'kcamba', name: 'Kenny', apellido: 'Camba', email: 'kacamba@espol.edu.ec',rol:'admin'},
+          {id: '3',user:'chjoguer', name: 'Christian', apellido: 'Guerrero', email: 'chjoguer@espol.edu.ec',rol:'validador'},
+          {id: '4',user:'joeles', name: 'Joel', apellido: 'Espinoza', email: 'joeles@espol.edu.ec',rol:'observador'},
+          {id: '5',user:'saragar', name: 'Sara', apellido: 'García', email: 'saragar@espol.edu.ec',rol:'validador'},
+          {id: '6',user:'joricast', name: 'Jordan', apellido: 'Castro', email: 'joricast@espol.edu.ec',rol:'visitante'},
+          {id: '7',user:'anditen', name: 'Andres', apellido: 'Tenempaguay', email: 'anditen@espol.edu.ec',rol:'visitante'},
         ]} 
         options={{
           search: true

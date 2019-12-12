@@ -1,13 +1,10 @@
 
 import React from "react";
 import '../../assets/css/login.css';
-import BasicSearch from './BasicSearch';
 import {
-    Button,
     FormGroup,
     Form,
     Row,
-    Col,
     Label,
 } from "reactstrap";
 class FormUser extends React.Component {
@@ -76,7 +73,7 @@ class FormUser extends React.Component {
                             </div>
                         </Row>
                     </FormGroup>
-                    <Button>Guardar</Button>
+                    
                     <p></p>
                     <p></p>
                     <p></p>
