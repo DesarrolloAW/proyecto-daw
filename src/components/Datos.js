@@ -1,7 +1,7 @@
 import React from 'react';
 import '../assets/css/datos.css';
 import classnames from 'classnames'
-import DataSearch from './BasicSearch';
+import DataSearch from './DataSearch';
 import CanvasJSReact from './../assets/vendor/canvasjs.react';
 // react plugin used to create datetimepicker
 import ReactDatetime from "react-datetime";
@@ -678,7 +678,7 @@ class Datos extends React.Component {
                                                     />
                                                 </InputGroup>
                                             </FormGroup>
-                                            <DataSearch/>
+                                            {/*<DataSearch/>*/}
                                             <Table responsive hover size="sm">
                                                 <thead className="thead-dark">
                                                     <tr>
