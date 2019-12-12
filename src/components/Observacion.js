@@ -46,7 +46,7 @@ class Observacion extends React.Component{
 					<div className="mx-auto row">
 					<Container>
 					<Row>
-						<Col xs="auto">Fecha de Observacion</Col>
+						<Col xs="auto">Fecha de Observación</Col>
 						</Row>
 						<Row>
 						<Col xs="auto">
@@ -100,7 +100,7 @@ class Observacion extends React.Component{
 						</UncontrolledDropdown>
 						</Col>
 						<Col  xs="auto"><UncontrolledDropdown>
-						<DropdownToggle caret>Escoga Canton</DropdownToggle>
+						<DropdownToggle caret>Escoga Cantón</DropdownToggle>
 						<DropdownMenu>
 						<DropdownItem>Guayaquil</DropdownItem>
 						<DropdownItem>Durán</DropdownItem>
@@ -126,7 +126,7 @@ class Observacion extends React.Component{
 						<Row>
 						<Col xs="auto">
 						<UncontrolledDropdown>
-						<DropdownToggle caret>Escoga una Estacion</DropdownToggle>
+						<DropdownToggle caret>Escoga una Estación</DropdownToggle>
 						<DropdownMenu>
 						<DropdownItem>Estación 1</DropdownItem>
 						<DropdownItem>Estación 2</DropdownItem>
@@ -149,7 +149,7 @@ class Observacion extends React.Component{
 						</UncontrolledDropdown>
 						</Col>
 						<Col xs="auto"><UncontrolledDropdown>
-						<DropdownToggle caret>Escoga epoca</DropdownToggle>
+						<DropdownToggle caret>Escoga época</DropdownToggle>
 						<DropdownMenu>
 						<DropdownItem>Invierno</DropdownItem>
 						<DropdownItem>Verano</DropdownItem>
