@@ -48,7 +48,7 @@ class Datos extends React.Component {
     };
 
     componentDidMount() {
-        fetch('https://cip-rrd.herokuapp.com/observaciones')
+        fetch('http://localhost:8000/observaciones/')
             .then(res => res.json())
             .then(res => this.setState({ observaciones: res }))
             .catch(() => this.setState({ observaciones: {} }));
