@@ -19,7 +19,41 @@ import {
 class Contactanos extends React.Component {
     constructor(args){
         super(args);
-        this.state = {}
+        this.state = {name: '', lastname: '', mail: '', subject: ''}
+
+        this.nameChange = this.nameChange.bind(this);
+        this.lastnameChange = this.lastnameChange.bind(this);
+        this.subjectChange = this.subjectChange.bind(this);
+        this.mailChange = this.mailChange.bind(this);
+        this.sendEmail = this.sendEmail.bind(this);
+    }
+
+    nameChange(e) {
+      this.setState({name: e.target.value});
+    }
+    lastnameChange(e) {
+      this.setState({lastname: e.target.value});
+    }
+    subjectChange(e) {
+      this.setState({subject: e.target.value});
+    }
+    mailChange(e) {
+      this.setState({mail: e.target.value});
+    }
+    
+    //http://127.0.0.1:8000/sendEmail/
+    sendEmail(e) {
+      e.preventDefault();
+      const data = new URLSearchParams("nombres="+this.state.name+" "+this.state.lastname+
+      "&asunto=Contacto a CIPRDR&correo="+this.state.mail+"&mensaje="+this.state.subject);
+
+      console.log('The link was clicked.');
+      console.log(data);
+      
+      fetch('http://127.0.0.1:8000/sendEmail/', {
+        method: 'POST', // or 'PUT'
+        body: data, // data can be `string` or {object}!
+      })
     }
 
     render(){
@@ -46,7 +80,8 @@ class Contactanos extends React.Component {
                                   <i className="ni ni-user-run" />
                                 </InputGroupText>
                               </InputGroupAddon>
-                              <Input placeholder="Nombre" type="text" onFocus={e => this.setState({ nameFocused: true })} onBlur={e => this.setState({ nameFocused: false })} />
+                              <Input placeholder="Nombre" type="text" onFocus={e => this.setState({ nameFocused: true })} onBlur={e => this.setState({ nameFocused: false })} 
+                              onChange={this.nameChange}/>
                             </InputGroup>
                           </FormGroup>
 
@@ -57,7 +92,8 @@ class Contactanos extends React.Component {
                                   <i className="ni ni-user-run" />
                                 </InputGroupText>
                               </InputGroupAddon>
-                              <Input placeholder="Apellido" type="text" onFocus={e => this.setState({ lastnameFocused: true })} onBlur={e => this.setState({ lastnameFocused: false })} />
+                              <Input placeholder="Apellido" type="text" onFocus={e => this.setState({ lastnameFocused: true })} onBlur={e => this.setState({ lastnameFocused: false })} 
+                              onChange={this.lastnameChange}/>
                             </InputGroup>
                           </FormGroup>
 
@@ -68,7 +104,8 @@ class Contactanos extends React.Component {
                                   <i className="ni ni-email-83" />
                                 </InputGroupText>
                               </InputGroupAddon>
-                              <Input placeholder="Correo" type="email" onFocus={e => this.setState({ emailFocused: true })} onBlur={e => this.setState({ emailFocused: false })}/>
+                              <Input placeholder="Correo" type="email" onFocus={e => this.setState({ emailFocused: true })} onBlur={e => this.setState({ emailFocused: false })}
+                              onChange={this.mailChange}/>
                             </InputGroup>
                           </FormGroup>
 
@@ -106,11 +143,12 @@ class Contactanos extends React.Component {
                           </FormGroup>
 
                           <FormGroup className="mb-4, col-12">
-                            <Input className="form-control-alternative" cols="80" name="name" placeholder="Detalle..." rows="4" type="textarea" />
+                            <Input className="form-control-alternative" cols="80" name="subject" placeholder="Detalle..." rows="4" type="textarea" 
+                            onChange={this.subjectChange}/>
                           </FormGroup>
                           
                           <div className="col-12">
-                            <Button block size="lg" type="button" >
+                            <Button block size="lg" type="button" onClick={this.sendEmail}>
                               Enviar
                             </Button>
                           </div>

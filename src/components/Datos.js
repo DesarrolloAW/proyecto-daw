@@ -238,14 +238,14 @@ class Datos extends React.Component {
                 promedio = promedio/newDat[i].mediciones.length;
                 puntos.push({label: i, y: promedio});
             }else if('Tiempo promedio por Observaciones' === titulo){
-                for(var med in newDat[i].mediciones){
-                    promedio += newDat[i].mediciones[med].corriente_del_litoral["tiempo"];
+                for(var med2 in newDat[i].mediciones){
+                    promedio += newDat[i].mediciones[med2].corriente_del_litoral["tiempo"];
                 }
                 promedio = promedio/newDat[i].mediciones.length;
                 puntos.push({label: i, y: promedio});
             } else if('Espacio promedio por Observaciones' === titulo){              
-                for(var med in newDat[i].mediciones){
-                    promedio += newDat[i].mediciones[med].corriente_del_litoral["espacio"];
+                for(var med3 in newDat[i].mediciones){
+                    promedio += newDat[i].mediciones[med3].corriente_del_litoral["espacio"];
                 }
                 promedio = promedio/newDat[i].mediciones.length;
                 puntos.push({label: i, y: promedio});
@@ -426,7 +426,7 @@ class Datos extends React.Component {
     }
 
     render() {
-        let observaciones = this.state.observaciones
+        //let observaciones = this.state.observaciones
 
         return (
             <main ref="main">
