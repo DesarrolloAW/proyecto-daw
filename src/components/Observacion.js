@@ -22,6 +22,10 @@ class Observacion extends React.Component {
 	constructor(args) {
 		super(args);
 		this.avarege=this.avarege.bind(this);
+		this.avaregePeriodo=this.avaregePeriodo.bind(this);
+		this.calcularVelocidad=this.calcularVelocidad.bind(this);
+		this.calcularOrientacion=this.calcularOrientacion.bind(this);
+
 		this.id1 = React.createRef();
 		this.id2 = React.createRef();
 		this.id3 = React.createRef();
@@ -33,11 +37,24 @@ class Observacion extends React.Component {
 		this.id9 = React.createRef();
 		this.id10 =React.createRef();
 		this.promedio =React.createRef();
+		this.tiempoTranscurrido = React.createRef();
+		this.periodoPromedio = React.createRef();
 
+		this.espacio = React.createRef();
+		this.tiempo = React.createRef();
+		this.velocidad = React.createRef();
+
+		this.orientacion = React.createRef();
+		this.ortogonal = React.createRef();
+		this.angulo = React.createRef();
+
+		
+ //(orientacion-90)-ort
 		this.state = {
 			array: [this.id1,this.id2,this.id3,this.id4,this.id5,this.id6,this.id7,this.id8,this.id9,this.id10],
 		}
 	}
+
 
 	avarege(){
 		var cont =0;
@@ -56,6 +73,30 @@ class Observacion extends React.Component {
 		console.log(prom);
 		console.log(this.state.array);
 	}
+
+	avaregePeriodo(){
+		if(this.tiempoTranscurrido.current.value!=''){
+			var promedio = parseFloat(this.tiempoTranscurrido.current.value)/10.0;
+			this.periodoPromedio.current.value=promedio;
+		}
+	}
+
+	calcularVelocidad(){
+		if(this.espacio.current.value!='' &&  this.tiempo.current.value!=''){
+			var velocidad = parseFloat(this.espacio.current.value)/parseFloat(this.tiempo.current.value);
+			this.velocidad.current.value=velocidad;
+		}
+
+	}
+
+
+	calcularOrientacion(){
+		if(this.orientacion.current.value!='' &&  this.ortogonal.current.value!=''){
+			var  angulo = 	(parseFloat(this.orientacion.current.value)-90)-parseFloat(this.ortogonal.current.value);
+			this.angulo.current.value=angulo;
+		}
+	}
+	
 
 
 	render() {
@@ -291,7 +332,7 @@ class Observacion extends React.Component {
 								<div class="row">
 									<div class="col-md-3">
 										<div class="col-md-15"><strong><label for="id_cs_space">Espacio(m)*:</label></strong></div>
-										<div class="col-md-15"> <input name="cs_space" class="form-control" id="id_cs_space" required="" type="number" step="any"  />
+										<div class="col-md-15"> <input ref = {this.espacio} onChange={()=>this.calcularVelocidad()} name="cs_space" class="form-control" id="id_cs_space" required="" type="number" step="any"  />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -299,7 +340,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-2">
 										<div class="col-md-15"><strong><label for="id_cs_time">Tiempo(s)*:</label></strong></div>
-										<div class="col-md-15"> <input name="cs_time" class="form-control" id="id_cs_time" required="" type="number" step="1"  />
+										<div class="col-md-15"> <input ref = {this.tiempo} onChange={()=>this.calcularVelocidad()} name="cs_time" class="form-control" id="id_cs_time" required="" type="number" step="1"  />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -319,7 +360,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-2">
 										<div class="col-md-15"><strong><label for="id_cs_speed">Velocidad(m/s):</label></strong></div>
-										<div class="col-md-15"><input name="cs_speed" disabled="" class="form-control" id="id_cs_speed" required="" type="number" step="any" />
+										<div class="col-md-15"><input  ref = {this.velocidad} name="cs_speed" disabled="" class="form-control" id="id_cs_speed" required="" type="number" step="any" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -387,7 +428,7 @@ class Observacion extends React.Component {
 								<div class="row">
 									<div class="col-md-3">
 										<div class="col-md-15"><li class="data"><span><label for="id_orientation">Orientacion de playa*:</label></span></li></div>
-										<div class="col-md-15"> <input name="orientation" class="form-control" id="id_orientation" required="" type="number" step="1"  />
+										<div class="col-md-15"> <input ref = {this.orientacion} name="orientation" onChange={()=>this.calcularOrientacion()} class="form-control" id="id_orientation" required="" type="number" step="1"  />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -399,7 +440,7 @@ class Observacion extends React.Component {
 								<div class="row">
 									<div class="col-md-2">
 										<div class="col-md-15"><strong><label for="id_ortogonal">Ortogonal*:</label></strong></div>
-										<div class="col-md-15"> <input name="ortogonal" class="form-control" id="id_ortogonal" required="" type="number" step="1" />
+										<div class="col-md-15"> <input ref = {this.ortogonal} onChange={()=>this.calcularOrientacion()} name="ortogonal" class="form-control" id="id_ortogonal" required="" type="number" step="1" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -407,7 +448,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-auto">
 										<div class="col-md-15"><strong><label for="id_angle">Ángulo de aproximación*:</label></strong></div>
-										<div class="col-md-15"> <input name="angle" disabled="" class="form-control" id="id_angle" required="" type="number" step="1" />
+										<div class="col-md-15"> <input ref = {this.angulo}  name="angle" disabled="" class="form-control" id="id_angle" required="" type="number" step="1" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -431,7 +472,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-auto">
 										<div class="col-md-15"><strong><label for="id_br_time">Tiempo transcurrido(s)*:</label></strong></div>
-										<div class="col-md-15"><input name="br_time" class="form-control" id="id_br_time" required="" type="number" step="1" />
+										<div class="col-md-15"><input ref = {this.tiempoTranscurrido} name="br_time" onChange={()=>this.avaregePeriodo()} class="form-control" id="id_br_time" required="" type="number" step="1" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -439,7 +480,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-auto">
 										<div class="col-md-15"><strong><label for="id_averagePeriod">Periodo promedio*:</label></strong></div>
-										<div class="col-md-15"><input name="averagePeriod" disabled="" class="form-control" id="id_averagePeriod" required="" type="number" step="any" />
+										<div class="col-md-15"><input ref = {this.periodoPromedio}  name="averagePeriod" disabled="" class="form-control" id="id_averagePeriod" required="" type="number" step="any" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -450,7 +491,7 @@ class Observacion extends React.Component {
 								<div class="row">
 									<div class="col-md-1">
 										<div class="col-md-15"><strong><label for="id_br1">1:</label></strong></div>
-										<div class="col-md-15"> <input ref={this.id1}onChange={()=>this.avarege()}  name="br1" class="form-control off" id="id_br1" required="" type="number" step="any"  />
+										<div class="col-md-15"> <input ref={this.id1} onChange={()=>this.avarege()}  name="br1" class="form-control off" id="id_br1" required="" type="number" step="any"  />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
