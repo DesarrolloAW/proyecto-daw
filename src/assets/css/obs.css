@@ -1,0 +1,14 @@
+
+.colorDark { color: #003135; }
+.primaryColor { color: #00B4C1; }
+.secundaryColor { color: #007982; }
+.tercearydColor { color: #006D75; }
+.colorTitle { color: #00555B; }
+
+#panel12 {
+    padding: 7%;
+}
+
+#title-med{
+    font-size: 2em;
+}
