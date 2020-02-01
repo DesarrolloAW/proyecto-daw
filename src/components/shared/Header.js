@@ -38,8 +38,11 @@ class Header extends React.Component{
         let headroom = new Headroom(document.getElementById("navbar-main"));
         // initialise
         headroom.init();
-      }
-      render() {
+    }
+    render() {
+        const user = false;
+        const admin = false;
+
         return (
           <>
             <header className="header-global">
@@ -87,12 +90,14 @@ class Header extends React.Component{
                                 <span className="nav-link-inner--text">Datos</span>
                             </NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink tag={Link} to="/observacion/" className="Observaciones">
-                                <i className="fa fa-sticky-note d-lg-none mr-1" />
-                                <span className="nav-link-inner--text">Observación</span>
-                            </NavLink>
-                        </NavItem>
+                        { user &&
+                            <NavItem>
+                                <NavLink tag={Link} to="/observacion/" className="Observaciones">
+                                    <i className="fa fa-sticky-note d-lg-none mr-1" />
+                                    <span className="nav-link-inner--text">Observación</span>
+                                </NavLink>
+                            </NavItem>
+                        }
                         <NavItem>
                             <NavLink tag={Link} to="/contactanos/" className="Contactanos">
                                 <i className="fa fa-address-card d-lg-none mr-1" />
@@ -105,22 +110,30 @@ class Header extends React.Component{
                                 <i className="ni ni-circle-08" />
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem to="/profile/" tag={Link}>
-                                    Perfil
-                                </DropdownItem>
+                                { user &&
+                                    <DropdownItem to="/profile/" tag={Link}>
+                                        Perfil
+                                    </DropdownItem>
+                                }
                                 <DropdownItem to="/login/" tag={Link}>
                                     Iniciar sesión
                                 </DropdownItem>
                                 <DropdownItem to="/register/" tag={Link}>
                                     Registrarse
                                 </DropdownItem>
-                                <DropdownItem to="/admin/" tag={Link}>
-                                    DashBoard
-                                </DropdownItem>
-                                <DropdownItem divider />
-                                <DropdownItem to="/salir/" tag={Link}>
-                                    Cerrar sesión
-                                </DropdownItem>
+                                { admin && 
+                                    <DropdownItem to="/admin/" tag={Link}>
+                                        DashBoard
+                                    </DropdownItem>
+                                }
+                                { user &&
+                                    <>
+                                        <DropdownItem divider />
+                                        <DropdownItem to="/salir/" tag={Link}>
+                                            Cerrar sesión
+                                        </DropdownItem>
+                                    </>
+                                }
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>

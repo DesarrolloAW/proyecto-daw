@@ -1,6 +1,6 @@
 import React from "react";
-import logo from '../../assets/img/logos/barco6x6.svg'
-import MailOutlinedIcon from '@material-ui/icons/MailOutlined';
+import logo from '../../assets/img/logos/barco6x6.svg';
+import FaceIcon from '@material-ui/icons/Face';
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
 import '../../assets/css/login.css';
 import { Link } from "react-router-dom";
@@ -23,15 +23,95 @@ import {
   NavLink,
 } from "reactstrap";
 
-
 class Login extends React.Component {
-  componentDidMount() {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.main.scrollTop = 0;
-  }
-  render() {
-    return (
+    constructor(args){
+        super(args);
+        this.state = {
+            user: '', 
+            pass: '',
+            anyUser: false,
+            anyPass: false,
+            passWrong: false,
+        };
+        this.loginAction = this.loginAction.bind(this);
+        this.userChange = this.userChange.bind(this);
+        this.passwordChange = this.passwordChange.bind(this);
+    }
+
+    componentDidMount() {
+        document.documentElement.scrollTop = 0;
+        document.scrollingElement.scrollTop = 0;
+        this.refs.main.scrollTop = 0;
+    }
+
+    userChange(e){
+        this.setState({user: e.target.value});
+    }
+
+    passwordChange(e){
+        this.setState({pass: e.target.value});
+    }
+
+    loginAction(e){
+        e.preventDefault();
+        if(this.state.user === '' || this.state.pass === ''){
+            this.state.user === '' ? this.setState({anyUser: true}) : this.setState({anyUser: false});
+            this.state.pass  === '' ? this.setState({anyPass: true})  : this.setState({anyPass: false});
+        }
+        else{
+            this.setState({anyUser: false, anyPass: false});
+
+            let url = new URL("http://127.0.0.1:8000/login/");//http://127.0.0.1:8000/login/?user=female&pass=US
+            //const params = {user: this.state.user, pass: this.state.pass};
+            // Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+            /*
+            fetch(url, {method: 'GET'}).then(function(response) {
+                console.log(response)
+                
+                if(response.ok) {
+                    console.log('OK')
+                    return response.text()
+                } else {
+                    throw "Error en la llamada Ajax";
+                } 
+            })
+            .then(function(texto) {
+                console.log(texto);
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+            */
+            console.log()
+            fetch(url, {
+                credentials: "include",
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify({user:this.state.user, pass:this.state.pass}),// data can be `string` or {object}!
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(response) {
+                console.log(response.status, response.status === 201 )
+                if(response.ok) {
+                    console.log('OK')
+                    return response.text()
+                } else {
+                    throw "Error en la llamada Ajax";
+                }
+             
+            }).then(function(texto) {
+                console.log(texto);
+                
+            }).catch(function(err) {
+                console.log(err);
+            });
+        }
+    }
+    
+
+    render() {
+        return (
             <main ref="main">
                 <section className="section section-shaped section-lg">
                     <div className="shape shape-style-1 bg-gradient-default">
@@ -61,11 +141,20 @@ class Login extends React.Component {
                                                 <InputGroup className="input-group-alternative">
                                                     <InputGroupAddon addonType="prepend">
                                                         <InputGroupText className="loginCuadro">
-                                                            <MailOutlinedIcon/>
+                                                            <FaceIcon/>
                                                         </InputGroupText>
                                                     </InputGroupAddon>
-                                                    <Input placeholder="Correo" type="email" className="loginCuadro" />
+                                                    <Input placeholder="Usuario" type="user" className="loginCuadro" onChange={this.userChange}/>
                                                 </InputGroup>
+                                                { this.state.anyUser &&
+                                                    <div className="font-italic text-left">
+                                                        <small>
+                                                            <span className="text-failed font-weight-700">
+                                                                Ingrese usuario.
+                                                            </span>
+                                                        </small>
+                                                    </div>
+                                                }
                                             </FormGroup>
                                             <FormGroup>
                                                 <InputGroup className="input-group-alternative">
@@ -74,15 +163,26 @@ class Login extends React.Component {
                                                             <HttpsOutlinedIcon/>
                                                         </InputGroupText>
                                                     </InputGroupAddon>
-                                                    <Input placeholder="Contraseña" type="password" autoComplete="off"className="loginCuadro" />
+                                                    <Input placeholder="Contraseña" type="password" autoComplete="off"className="loginCuadro" onChange={this.passwordChange}/>
                                                 </InputGroup>
-                                                <div className="font-italic text-left">
-                                                    <small>
-                                                        <span className="text-failed font-weight-700">
-                                                        Contraseña incorrecta
-                                                        </span>
-                                                    </small>
-                                                </div>
+                                                { this.state.anyPass &&
+                                                    <div className="font-italic text-left">
+                                                        <small>
+                                                            <span className="text-failed font-weight-700">
+                                                                Ingrese contraseña.
+                                                            </span>
+                                                        </small>
+                                                    </div>
+                                                }
+                                                { this.state.passWrong &&
+                                                    <div className="font-italic text-left">
+                                                        <small>
+                                                            <span className="text-failed font-weight-700">
+                                                            Contraseña incorrecta
+                                                            </span>
+                                                        </small>
+                                                    </div>
+                                                }
                                             </FormGroup>
                                             <div className="custom-control custom-control-alternative custom-checkbox text-left">
                                                 <input className="custom-control-input" id="customCheckLogin" type="checkbox"/>
@@ -91,10 +191,7 @@ class Login extends React.Component {
                                                 </label>
                                             </div>
                                             <div className="text-center">
-                                                <Button
-                                                    className="mt-3"
-                                                    type="button"
-                                                >
+                                                <Button className="mt-3" type="button" onClick={this.loginAction}>
                                                     Iniciar
                                                 </Button>
                                             </div>         

@@ -17,7 +17,7 @@ import {
 
 } from "reactstrap";
 
-class Observacion extends React.Component{
+	class Observacion extends React.Component{
 	constructor(args){
         super(args);
         this.state = {}
