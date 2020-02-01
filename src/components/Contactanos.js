@@ -1,7 +1,8 @@
 import React from 'react'
 import '../assets/css/contactanos.css'
 import logo from '../assets/img/logos/barco6x6.svg'
-import classnames from 'classnames'
+import classnames from 'classnames';
+//import { SnackbarProvider, useSnackbar } from 'notistack';
 
 import {
   Input,
@@ -44,16 +45,33 @@ class Contactanos extends React.Component {
     //http://127.0.0.1:8000/sendEmail/
     sendEmail(e) {
       e.preventDefault();
-      const data = new URLSearchParams("nombres="+this.state.name+" "+this.state.lastname+
-      "&asunto=Contacto a CIPRDR&correo="+this.state.mail+"&mensaje="+this.state.subject);
-
-      console.log('The link was clicked.');
-      console.log(data);
+      const data = new URLSearchParams("nombres="+this.state.name+" "+this.state.lastname);
+      data.append('correo', this.state.mail);
+      data.append('mensaje', this.state.subject);
       
       fetch('http://127.0.0.1:8000/sendEmail/', {
         method: 'POST', // or 'PUT'
         body: data, // data can be `string` or {object}!
-      })
+      }).then(function(response) {
+        console.log(response.status)
+        if(response.ok && response.status === 201 ) {
+            console.log('OK')
+            return response.text()
+        } else {
+            throw "Error en la llamada Ajax";
+        }
+      }).then(function(texto) {
+          console.log(texto);
+      }).catch(function(err) {
+          console.log(err);
+      });
+      //useSnackbar('This is a success message!', 'success');
+      /*
+        <Alert severity="success">
+          <AlertTitle>Success</AlertTitle>
+          This is a success alert — check it out!
+        </Alert>
+      */
     }
 
     render(){
@@ -159,6 +177,13 @@ class Contactanos extends React.Component {
                   </Row>
                 </Card>
                   
+                  {/*
+                <SnackbarProvider maxSnack={3}>
+                  
+                </SnackbarProvider>
+                */
+                }
+
               </div>
 
               {/* SVG separator */}
