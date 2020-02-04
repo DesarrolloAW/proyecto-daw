@@ -2,6 +2,7 @@ import React from 'react'
 import '../assets/css/contactanos.css'
 import logo from '../assets/img/logos/barco6x6.svg'
 import classnames from 'classnames';
+import auth from "../auth";
 //import { SnackbarProvider, useSnackbar } from 'notistack';
 
 import {
@@ -48,6 +49,7 @@ class Contactanos extends React.Component {
       const data = new URLSearchParams("nombres="+this.state.name+" "+this.state.lastname);
       data.append('correo', this.state.mail);
       data.append('mensaje', this.state.subject);
+      let currentComponent = this;
       
       fetch('http://127.0.0.1:8000/sendEmail/', {
         method: 'POST', // or 'PUT'
@@ -62,6 +64,10 @@ class Contactanos extends React.Component {
         }
       }).then(function(texto) {
           console.log(texto);
+
+          auth.login(() => {
+            currentComponent.props.history.push("/");
+          });
       }).catch(function(err) {
           console.log(err);
       });
@@ -72,6 +78,10 @@ class Contactanos extends React.Component {
           This is a success alert — check it out!
         </Alert>
       */
+    }
+
+    componentWillUnmount() {
+      console.log('Desmontandos')
     }
 
     render(){

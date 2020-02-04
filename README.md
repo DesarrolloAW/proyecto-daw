@@ -33,6 +33,9 @@ npm install moment --save,
 npm install react-geolocated --save,
 npm install mapbox-gl --save,
 npm install material-table --save,
+npm install js-cookie,
+npm audit fix,
+
 
 npm install @material-ui/core,
 npm install @material-ui/icons,

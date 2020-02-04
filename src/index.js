@@ -23,21 +23,24 @@ import Profile from './components/users/Profile'
 import Desarrolladores from './components/Desarrolladores';
 import Observacion from './components/Observacion';
 import Admin from './components/admin/Admin';
+import ProtectedRoute from './protectedRoute';
 
 ReactDOM.render(
     <div className="App">
       <Router>
         <Layout>
           <Route exact path='/' component={Inicio} />
-          <Route path='/datos/' component={Datos} />
-          <Route path='/contactanos/' component={Contactanos} />
-          <Route path='/nosotros/' component={Nosotros} />
-          <Route path='/login/' component={Login}/>
-          <Route path='/register/' component={Register}/>
-          <Route path='/desarrolladores/' component={Desarrolladores}/>
-          <Route path='/observacion/' component={Observacion} />
-          <Route path='/profile/' render = {(props) => <Profile {...props} id={10} nombre="Karla" apellido="Pérez"/>}/>
-          <Route path='/admin/' component={Admin}/>
+          <Route path='/datos' component={Datos} />
+          <Route path='/contactanos' component={Contactanos} />
+          <Route path='/nosotros' component={Nosotros} />
+          <Route exact path='/login' component={Login}/>
+          <Route path='/register' component={Register}/>
+          <Route path='/desarrolladores' component={Desarrolladores}/>
+          <ProtectedRoute exact path='/observacion' component={Observacion} />
+          <ProtectedRoute exact path='/profile' render = {(props) => <Profile {...props} id={10} nombre="Karla" apellido="Pérez"/>}/>
+          <ProtectedRoute exact path="/admin" component={Admin} />
+          
+          <Route path="/error" component={() => "404 NOT FOUND"} />
         </Layout>
       </Router>
     </div>

@@ -4,6 +4,10 @@ import FaceIcon from '@material-ui/icons/Face';
 import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
 import '../../assets/css/login.css';
 import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
+import auth from "../../auth";
+
+//import { instanceOf } from 'prop-types';
 
 // reactstrap components
 import {
@@ -24,8 +28,10 @@ import {
 } from "reactstrap";
 
 class Login extends React.Component {
-    constructor(args){
-        super(args);
+    constructor(props){
+        super(props);
+
+
         this.state = {
             user: '', 
             pass: '',
@@ -61,7 +67,9 @@ class Login extends React.Component {
         else{
             this.setState({anyUser: false, anyPass: false});
 
-            let url = new URL("http://127.0.0.1:8000/login/");//http://127.0.0.1:8000/login/?user=female&pass=US
+            let currentComponent = this;
+            let url = new URL("http://127.0.0.1:8000/login/");
+            //http://127.0.0.1:8000/login/?user=female&pass=US
             //const params = {user: this.state.user, pass: this.state.pass};
             // Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
@@ -83,11 +91,11 @@ class Login extends React.Component {
                 console.log(err);
             });
             */
-            console.log()
+            
             fetch(url, {
                 credentials: "include",
                 method: 'POST', // or 'PUT'
-                body: JSON.stringify({user:this.state.user, pass:this.state.pass}),// data can be `string` or {object}!
+                body: JSON.stringify({username:this.state.user, password:this.state.pass}),// data can be `string` or {object}!
                 headers:{
                     'Content-Type': 'application/json'
                 }
@@ -95,14 +103,20 @@ class Login extends React.Component {
                 console.log(response.status, response.status === 201 )
                 if(response.ok) {
                     console.log('OK')
+                    //currentComponent.setState({redirect:true})
+
                     return response.text()
                 } else {
                     throw "Error en la llamada Ajax";
                 }
-             
             }).then(function(texto) {
                 console.log(texto);
-                
+                var jsonText = JSON.parse(texto);
+                Cookies.set("tokenId", jsonText['tokenId'], { expires: 1});
+
+                auth.login(() => {
+                    currentComponent.props.history.push("/admin");
+                });
             }).catch(function(err) {
                 console.log(err);
             });
@@ -111,6 +125,8 @@ class Login extends React.Component {
     
 
     render() {
+        //if(this.state.redirect)
+            //return <Redirect to='/'/>
         return (
             <main ref="main">
                 <section className="section section-shaped section-lg">

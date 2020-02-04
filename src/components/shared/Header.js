@@ -7,6 +7,8 @@ import logo from '../../assets/img/logos/barco6x6.svg';
 // JavaScript plugin that hides or shows a component based on your scroll
 import Headroom from "headroom.js";
 
+import auth from "../../auth";
+
 import {
     //Button,
     UncontrolledCollapse,
@@ -29,9 +31,10 @@ import {
 
 
 class Header extends React.Component{
-    constructor(args){
-        super(args);
+    constructor(props){
+        super(props);
         this.state = {}
+        this.logoutAction = this.logoutAction.bind(this);
     }
 
     componentDidMount() {
@@ -39,6 +42,12 @@ class Header extends React.Component{
         // initialise
         headroom.init();
     }
+
+    logoutAction(e){
+        console.log('cerrar sesión');
+        auth.logout();
+    }
+
     render() {
         const user = false;
         const admin = false;
@@ -126,10 +135,10 @@ class Header extends React.Component{
                                         DashBoard
                                     </DropdownItem>
                                 }
-                                { user &&
+                                { user ||
                                     <>
                                         <DropdownItem divider />
-                                        <DropdownItem to="/salir/" tag={Link}>
+                                        <DropdownItem to="/" tag={Link} onClick={this.logoutAction}>
                                             Cerrar sesión
                                         </DropdownItem>
                                     </>
