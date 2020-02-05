@@ -46,7 +46,15 @@ class Admin extends React.Component{
                 }
             ],
             tabs: 1,
+            stations: {},
         };
+    }
+
+    componentDidMount(){
+        fetch('http://localhost:3001/stations')
+      .then(res => res.json())
+      .then(res => this.setState({ stations: res }))
+      .catch(() => this.setState({ hasErrors: true }));
     }
 
     onExit(e){
@@ -65,7 +73,7 @@ class Admin extends React.Component{
 
     render(){
         const { stepsEnabled, steps, initialStep, hintsEnabled, hints } = this.state;
-
+        var stations = this.state.stations;
         return(
             <>
                 <Steps
@@ -210,13 +218,22 @@ class Admin extends React.Component{
                                                         </thead>
 
                                                         <tbody id="tabla" style={{background: 'white'}}>
-                                                            <tr key={"row"}>
+                                                            {/*<tr key={"row"}>
                                                                 <th scope="row">{parseInt('1',10)}</th>
                                                                 <td>Estación 1 (Olón)</td>
                                                                 <td>-0.23213</td>
                                                                 <td>11.23123</td>
                                                                 <td className="text-center"><i className="fa fa-eye" aria-hidden="true"></i></td>
-                                                            </tr>
+        </tr>*/}
+                                                            {Object.keys(stations).map((k) => (
+                                                                <tr key={"row"}>
+                                                                    <th scope="row">{stations[k].id}</th>
+                                                                    <td>{stations[k].name}</td>
+                                                                    <td>{stations[k].coord.lat}</td>
+                                                                    <td>{stations[k].coord.lng}</td>
+                                                                    <td className="text-center"><a href=""><i className="fa fa-eye" aria-hidden="true"></i></a></td>
+                                                                </tr>
+                                                            ))}
                                                         </tbody>
                                                     </Table>
                                                     <p id="total"/>

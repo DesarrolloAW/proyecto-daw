@@ -93,12 +93,12 @@ class Inicio extends React.Component{
     }
 
     componentDidMount(){
-        fetch('https://cip-rrd.herokuapp.com/estaciones')
+        fetch('http://localhost:3001/stations')
       .then(res => res.json())
       .then(res => this.setState({ stations: res }))
       .catch(() => this.setState({ hasErrors: true }));
 
-      fetch('https://cip-rrd.herokuapp.com/observaciones')
+      fetch('http://localhost:8000/observaciones/')
       .then(res => res.json())
       .then(res => this.setState({ obs: res, isLoading: false }))
       .catch(() => this.setState({ obsError: true }));
@@ -160,8 +160,8 @@ class Inicio extends React.Component{
         for(var key in list){
             var fechas = list[key]["fecha"];
             for(var k=0; k<fechas.length; k++){
-                var f = fechas[k].split("/");
-                fechas[k] = new Date(parseInt(f[2]), parseInt(f[1]), parseInt(f[0]));
+                var f = fechas[k].split("-");
+                fechas[k] = new Date(parseInt(f[0]), parseInt(f[1]), parseInt(f[2]));
             }
             var max = fechas.reduce(function (a, b) { return a > b ? a : b; });
             var index = fechas.indexOf(max);
@@ -224,23 +224,23 @@ class Inicio extends React.Component{
                                         </div>
                                         <div id="markers">
                                         { Object.keys(stations).map(k =>(
-                                            <div key={"maker" + k}>
+                                            <div key={"maker" + stations[k].id}>
                                                 <Layer type="symbol"
-                                                id={k}
+                                                id={stations[k].id+""}
                                                 layout={{'icon-image': 'marker-15'}}>
                                                     <Feature coordinates={[stations[k].coord.lng, stations[k].coord.lat]} 
-                                                    onMouseEnter={() => this.show("popup" + k)}
-                                                    onMouseLeave={() => this.hide("popup" + k)}/>
+                                                    onMouseEnter={() => this.show("popup" + stations[k].id)}
+                                                    onMouseLeave={() => this.hide("popup" + stations[k].id)}/>
                                                 </Layer>
-                                                <div className="d-none" id={"popup" + k}>
+                                                <div className="d-none" id={"popup" + stations[k].id}>
                                                     <Popup
                                                         coordinates={[stations[k].coord.lng, stations[k].coord.lat]}>
                                                         <div>
                                                             <strong>Nombre: </strong>{stations[k].name} <br/>
                                                             <strong>Ubicación: </strong> {stations[k].parish}, cantón  {stations[k].canton},<br></br>
                                                             provincia de {stations[k].province}<br/>
-                                                            <strong>Total de observaciones: </strong>{this.state.isLoading ? "..." : sts[k].obs}<br/>
-                                                            <strong>Última observación: </strong>{this.state.isLoading ? "..." : this.formatDate(sts[k].fecha)}
+                                                            <strong>Total de observaciones: </strong>{this.state.isLoading || sts[stations[k].id+""] == null ? "..." : sts[stations[k].id+""].obs}<br/>
+                                                            <strong>Última observación: </strong>{this.state.isLoading || sts[stations[k].id+""] == null ? "..." : this.formatDate(sts[stations[k].id+""].fecha)}
                                                         </div>        
                                                     </Popup>
                                                 </div>

@@ -33,10 +33,21 @@ class Estacion extends React.Component {
         this.parr = React.createRef();
         this.state = {
             mapa: {},
-            isLoad: false
+            isLoad: false,
+            provs: {},
+            provLoad: false
         }
         this.hide = this.hide.bind(this);
         this.show = this.show.bind(this);
+        this.provChange = this.provChange.bind(this);
+        this.cantChange = this.cantChange.bind(this);
+    }
+
+    componentDidMount(){
+        fetch('http://localhost:8000/provincias/')
+        .then(res => res.json())
+        .then(res => this.setState({ provs: res, provLoad: true }))
+        .catch(() => this.setState({ isLoad: false }));
     }
 
     addMaker(lat, lng) {
@@ -73,7 +84,7 @@ class Estacion extends React.Component {
     fullInput(lat, lng) {
         this.lat.current.value = lat;
         this.lng.current.value = lng;
-        var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lng + "," + lat + ".json?access_token=" + api;
+        /*var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lng + "," + lat + ".json?access_token=" + api;
         fetch(url)
             .then(res => res.json())
             .then(json => {
@@ -81,7 +92,7 @@ class Estacion extends React.Component {
                 this.cant.current.value = geo.context[0].text;
                 this.prov.current.value = geo.context[1].text;
             })
-            .catch(() => alert("Por favor, llene los campos de localización"))
+            .catch(() => alert("Por favor, llene los campos de localización"))*/
     }
 
     geoLocate(props) {
@@ -113,6 +124,44 @@ class Estacion extends React.Component {
         a.className = "";
     }
 
+    provChange(value){
+        var cantones = document.getElementById("EjemploCanton");
+        cantones.innerHTML = "";
+        var parroquias = document.getElementById("EjemploParroquia");
+        parroquias.innerHTML = "";
+        var op = document.createElement("option");
+        op.value = "0";
+        cantones.appendChild(op);
+        fetch("http://localhost:8000/cantones/?id_provincia=" + value)
+        .then(res => res.json())
+        .then(cants => {
+            for(var c in cants){
+                var option = document.createElement("option");
+                option.value = c;
+                option.text = cants[c];
+                cantones.appendChild(option);
+            }
+        });
+    }
+
+    cantChange(value){
+        var parroquias = document.getElementById("EjemploParroquia");
+        parroquias.innerHTML = "";
+        var op = document.createElement("option");
+        op.value = "0";
+        parroquias.appendChild(op);
+        fetch("http://localhost:8000/parroquias/?id_canton=" + value)
+        .then(res => res.json())
+        .then(parrs => {
+            for(var p in parrs){
+                var option = document.createElement("option");
+                option.value = p;
+                option.text = parrs[p];
+                parroquias.appendChild(option);
+            }
+        })
+    }
+
     render() {
         if (this.state.isLoad) {
             this.state.mapa.on("click", (e) => {
@@ -120,6 +169,9 @@ class Estacion extends React.Component {
                 this.fullInput(e.lngLat.lat, e.lngLat.lng)
             });
         }
+        var provincias = {};
+        if(this.state.provLoad)
+            provincias = this.state.provs;
         return (
             <main ref="main">
                 <section className="section-shaped">
@@ -133,7 +185,7 @@ class Estacion extends React.Component {
                         <span />
                         <span />
                     </div>
-                    <Form>
+                    <Form action="http://localhost:8000/crear_estacion/" method="POST">
                         <h3 className="text-center colorTitle"><strong>Registro de Estación</strong></h3>
                         <FormGroup>
                             <Label for="EjemploNombre">Nombre</Label>
@@ -143,15 +195,20 @@ class Estacion extends React.Component {
                             <Col>
                                 <FormGroup>
                                     <Label for="EjemploLatitud">Latitud</Label>
-                                    <input type="number" className="form-control" ref={this.lat} name="latitud" id="EjemploLatitud" placeholder="Indique la latitud" />
+                                    <input type="number" step="0.00000000000001" className="form-control" ref={this.lat} name="latitud" id="EjemploLatitud" placeholder="Indique la latitud" />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="EjemploLongitud">Longitud</Label>
-                                    <input type="number" className="form-control" ref={this.lng} name="logintud" id="EjemploLatitud" placeholder="Indique la longitud" />
+                                    <input type="number" step="0.00000000000001" className="form-control" ref={this.lng} name="longitud" id="EjemploLatitud" placeholder="Indique la longitud" />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="EjemploProvincia">Provincia</Label>
-                                    <input type="text" className="form-control" ref={this.prov} name="provincia" id="EjemploProvincia" placeholder="Escoga la provincia" />
+                                    <select className="form-control" ref={this.prov} name="provincia" id="EjemploProvincia" placeholder="Escoga la provincia" onChange={() => this.provChange(this.prov.current.value)}>
+                                        <option value="0"></option>
+                                        {Object.keys(provincias).map((k) => (
+                                            <option value={k}>{provincias[k]}</option>
+                                        ))}
+                                    </select>
                                 </FormGroup>
                             </Col>
                             <div className="container-fluid col-md-6 col-sm-12">
@@ -179,16 +236,24 @@ class Estacion extends React.Component {
                             <div className="container-fluid col-md-6 col-sm-12">
                                 <FormGroup>
                                     <Label for="EjemploCanton">Canton</Label>
-                                    <input type="text" className="form-control" ref={this.cant} name="canton" id="EjemploCanton" placeholder="Escoga el canton" />
+                                    <select className="form-control" ref={this.cant} name="canton" id="EjemploCanton" placeholder="Escoja el canton" onChange={() => this.cantChange(this.cant.current.value)}>
+
+                                    </select>
                                 </FormGroup>
                             </div>
                             <div className="container-fluid col-md-6 col-sm-12">
                                 <FormGroup>
                                     <Label for="EjemploParroquia">Parroquia</Label>
-                                    <input type="text" className="form-control" ref={this.parr} name="parroquia" id="EjemploParroquia" placeholder="Escoga la parroquia" />
+                                    <select className="form-control" ref={this.parr} name="parroquia" id="EjemploParroquia" placeholder="Escoga la parroquia" >
+
+                                    </select>
                                 </FormGroup>
                             </div>
                         </Row>
+                        <FormGroup>
+                            <Label for="EjemploImagen">Foto estacion (URL)</Label>
+                            <input type="text" className="form-control" name="img" id="EjemploImagen" placeholder="Imagen (URL)" />
+                        </FormGroup>
                         <Button>Guardar</Button>
                         <p></p>
                         <p></p>
