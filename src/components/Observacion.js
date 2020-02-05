@@ -20,6 +20,7 @@ import {
 
 
 } from "reactstrap";
+import { ThemeProvider } from "@material-ui/core";
 
 class Observacion extends React.Component {
 	constructor(args) {
@@ -28,6 +29,7 @@ class Observacion extends React.Component {
 		this.avaregePeriodo = this.avaregePeriodo.bind(this);
 		this.calcularVelocidad = this.calcularVelocidad.bind(this);
 		this.calcularOrientacion = this.calcularOrientacion.bind(this);
+		this.changeDate = this.changeDate.bind(this);
 
 		this.id1 = React.createRef();
 		this.id2 = React.createRef();
@@ -39,6 +41,7 @@ class Observacion extends React.Component {
 		this.id8 = React.createRef();
 		this.id9 = React.createRef();
 		this.id10 = React.createRef();
+		this.date = React.createRef();
 
 		this.promedio = React.createRef();
 		this.tiempoTranscurrido = React.createRef();
@@ -75,7 +78,8 @@ class Observacion extends React.Component {
 			resaca:'',
 			averagePeriod:'',
 			angle:'',
-			body:''
+			date:'',
+			
 		}
 
 
@@ -83,8 +87,115 @@ class Observacion extends React.Component {
 	changeHandler = e =>{
 		this.setState({[e.target.name]: e.target.value});
 	}
+
+	changeDate(date){
+		this.state.date=date._d
+	}
 	submitHandler = e =>{
+		//this.postObservacion(e);
 		e.preventDefault();
+		var opts ={"mediciones":"45"}
+		const data =  {
+		//	"id_medicion": 304,
+			"fechaHora":  "2020-02-01T19:02:58.784470Z",
+			"corriente_resaca": true,
+			"provincia": this.state.provincia,
+			"parroquia": this.state.parroquia,
+			"canton": "Durán",
+			"estacion": this.state.estacion,
+			"fase": this.state.fase,
+			"epoca": this.state.epoca,
+			"latitud": parseFloat(this.state.latitude),
+			"longitud": parseFloat(this.state.longitude),
+			"temperatura": parseFloat(this.state.tmp),
+			"perfil_playa": 53,
+			"ancho_zon_surf": parseFloat(this.state.surf),
+			"lp_flotador": parseFloat(this.state.lp_flot),
+			"lp_rompiente": parseFloat(this.state.lp_rompien),
+			"crl_espacio": parseFloat(this.state.cs_space),
+			"crl_tiempo": parseFloat(this.state.cs_time),
+			"crl_velocidad": parseFloat(this.state.velocidad),
+			"crl_direccion": this.state.cs_direc,
+			"vien_direccion": parseFloat(this.state.vi_dir),
+			"vien_velocidad": parseFloat(this.state.vi_speed),
+			"ola_ortogonal": parseFloat(this.state.ortogonal),
+			"ola_periodo_onda": parseFloat(this.state.averagePeriod),
+			"ola_altura_rompiente_promedio":  parseFloat(this.state.average),
+			"ola_direccion": 0,
+			"id_observacion": 20,
+			"ola_tipo_oleaje": this.state.tipo,
+			"id_periodo": 17,
+			"estado": 3,
+			//alturaolas
+			"md1":parseFloat(this.state.br1),
+			"md2":parseFloat(this.state.br2),
+			"md3":parseFloat(this.state.br3),
+			"md4":parseFloat(this.state.br4),
+			"md5":parseFloat(this.state.br5),
+			"md6":parseFloat(this.state.br6),
+			"md7":parseFloat(this.state.br4),
+			"md8":parseFloat(this.state.br8),
+			"md9":parseFloat(this.state.br9),
+			"md10":parseFloat(this.state.br10),
+
+
+		};
+		const d =  {
+		//	"id_medicion": 303,
+			"fechaHora": "2020-02-01T19:02:58.784470Z",
+			"provincia": "Guayas",
+			"parroquia": "General Villamil",
+			"canton": "Durán",
+			"estacion": "Estacion 1",
+			"fase": "Sigicia",
+			"epoca": "Verano",
+			"corriente_resaca": true,
+			"latitud": parseFloat(this.state.latitude),
+			"longitud": parseFloat(this.state.longitude),
+			"temperatura": 26.0,
+			"perfil_playa": 53,
+			"ancho_zon_surf": 5.0,
+			"lp_flotador": 8,
+			"lp_rompiente": 2,
+			"crl_espacio": 7.0,
+			"crl_tiempo": 47,
+			"crl_velocidad": 0.14893617021276595,
+			"crl_direccion": "I",
+			"vien_direccion": 260,
+			"vien_velocidad": 260.0,
+			"ola_ortogonal": 300,
+			"ola_periodo_onda": 156,
+			"ola_altura_rompiente_promedio": 0.24500000000000002,
+			"ola_direccion": -45,
+			"id_observacion": 20,
+			"ola_tipo_oleaje": "plu",
+			"id_periodo": 17,
+			"estado": 3
+		};
+		
+		console.log( JSON.stringify(data))
+		fetch('http://127.0.0.1:8000/postObservaciones/', {
+		  method: 'POST', // or 'PUT'
+		  body: JSON.stringify(data),
+		  headers: {
+			'Authorization': '',
+			'Content-Type': 'application/json',
+		  }
+		   // data can be `string` or {object}!
+		}).then(function(response) {
+		  console.log(response.status)
+		  if(response.ok && response.status === 200 ) {
+			  console.log('OK')
+			  return response.text()
+		  } else {
+			  throw "Error en la llamada Ajax";
+		  }
+		}).then(function(texto) {
+			console.log(texto);
+		}).catch(function(err) {
+			console.log(err);
+		});
+		
 		console.log(this.state);
 	}
 
@@ -137,26 +248,6 @@ class Observacion extends React.Component {
 	}
 	postObservacion(e) {
 		e.preventDefault();
-		const data = new URLSearchParams("nombres="+this.state.name+" "+this.state.lastname);
-		data.append('correo', this.state.mail);
-		data.append('mensaje', this.state.subject);
-		
-		fetch('-', {
-		  method: 'POST', // or 'PUT'
-		  body: data, // data can be `string` or {object}!
-		}).then(function(response) {
-		  console.log(response.status)
-		  if(response.ok && response.status === 201 ) {
-			  console.log('OK')
-			  return response.text()
-		  } else {
-			  throw "Error en la llamada Ajax";
-		  }
-		}).then(function(texto) {
-			console.log(texto);
-		}).catch(function(err) {
-			console.log(err);
-		});
 		
 	  }
 
@@ -211,7 +302,7 @@ class Observacion extends React.Component {
 																	<i className="ni ni-calendar-grid-30" />
 																</InputGroupText>
 															</InputGroupAddon>
-															<ReactDatetime
+															<ReactDatetime 
 																inputProps={{ placeholder: "Date Picker Here" }}
 																timeFormat={false}
 																renderDay={(props, currentDate, selectedDate) => {
@@ -229,10 +320,12 @@ class Observacion extends React.Component {
 																		</td>
 																	);
 																}}
-																onChange={e => this.setState({ startDate: e })}
+																ref={this.date}
+																name="date"
+																id="id_date"
+																onChange={e => {this.setState({ startDate: e });this.changeDate(e)}}
 																onFocus={e => this.setState({ fechaInicioFocused: true })}
 																onBlur={e => this.setState({ fechaInicioFocused: false })}
-																onChange= {this.changeHandler} 
 															/>
 														</InputGroup>
 													</FormGroup>
@@ -277,7 +370,7 @@ class Observacion extends React.Component {
 															<option>Guayaquil</option>
 															<option>Durán</option>
 															<option>Milagro</option>
-															<option>Manabí</option>
+															<option>Playas</option>
 															<option>Santa Elena</option>
 														</Input>
 												</Col>
@@ -293,9 +386,9 @@ class Observacion extends React.Component {
 													</UncontrolledDropdown>*/}
 													  <Input placeholder="parroquias" type="select" onChange={this.changeHandler} name="parroquia" onFocus={e => this.setState({ provFocused: true })} onBlur={e => this.setState({ provFocused: false })}>
 															<option value="">Escoga Parroquia</option>
-															<option>Guayaquil</option>
-															<option>Durán</option>
-															<option>Milagro</option>
+															<option>General Villamil</option>
+															<option>Vicente Rocafuerte</option>
+															<option>Manglaralto</option>
 															<option>Manabí</option>
 															<option>Santa Elena</option>
 														</Input>
@@ -336,8 +429,8 @@ class Observacion extends React.Component {
 													</UncontrolledDropdown>*/}
 														<Input placeholder="fases" type="select" onChange={this.changeHandler} name="fase" onFocus={e => this.setState({ provFocused: true })} onBlur={e => this.setState({ provFocused: false })}>
 															<option value="">Escoga Fase Lunar</option>
-															<option>Sigicia</option>
-															<option>Cuadratura</option>
+															<option value="Sicigia">Sicigia</option>
+															<option value="Cuadratura">Cuadratura</option>
 														</Input>
 												</Col>
 												<Col xs="auto">
@@ -350,8 +443,8 @@ class Observacion extends React.Component {
 													</UncontrolledDropdown>*/}
 														<Input placeholder="epocas" type="select" onChange={this.changeHandler} name="epoca" onFocus={e => this.setState({ provFocused: true })} onBlur={e => this.setState({ provFocused: false })}>
 															<option value="">Escoga Época </option>
-															<option>Invierno</option>
-															<option>Verano</option>
+															<option value="Invierno">Invierno</option>
+															<option value="Verano">Verano</option>
 														</Input>
 												</Col>
 											</Row>
@@ -461,8 +554,8 @@ class Observacion extends React.Component {
 										<div class="col-md-15"><strong><label for="id_cs_direc">Dirección*:</label></strong></div>
 										<div class="col-md-15"><select name="cs_direc" onChange={this.changeHandler} class="form-control" id="id_cs_direc">
 											<option value="0"></option>
-											<option value="1">D</option>
-											<option value="2">I</option>
+											<option value="D">D</option>
+											<option value="I">I</option>
 										</select>
 										</div>
 										<div class="col-md-15">
@@ -634,7 +727,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-1">
 										<div class="col-md-15"><strong><label for="id_br5">5:</label></strong></div>
-										<div class="col-md-15"> <input ref={this.id5} name="br5" onChange={e => {this.avarege();this.changeHandler(e)}} class="form-control off" id="id_br5" onChange={() => this.avarege()} required="" type="number" step="any" />
+										<div class="col-md-15"> <input ref={this.id5} name="br5" onChange={e => {this.avarege();this.changeHandler(e)}} class="form-control off" id="id_br5"  required="" type="number" step="any" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -642,7 +735,7 @@ class Observacion extends React.Component {
 									</div>
 									<div class="col-md-1">
 										<div class="col-md-15"><strong><label for="id_br6">6:</label></strong></div>
-										<div class="col-md-15"> <input ref={this.id6} name="br6" onChange={e => {this.avarege();this.changeHandler(e)}} class="form-control off" id="id_br6" onChange={() => this.avarege()} required="" type="number" step="any" />
+										<div class="col-md-15"> <input ref={this.id6} name="br6" onChange={e => {this.avarege();this.changeHandler(e)}} class="form-control off" id="id_br6" required="" type="number" step="any" />
 										</div>
 										<div class="col-md-15">
 											<div class="error"></div>
@@ -687,7 +780,7 @@ class Observacion extends React.Component {
 										<div class="col-md-15">
 											<div class="error"></div>
 										</div>
-										<Button className="mt-3" type="submit" >
+										<Button className="mt-3" type="Submit" >
                                                     Enviar
                                          </Button>
 									</div>
