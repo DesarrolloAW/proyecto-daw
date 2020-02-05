@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
 import auth from "../../auth";
 
-//import { instanceOf } from 'prop-types';
 
 // reactstrap components
 import {
@@ -38,6 +37,7 @@ class Login extends React.Component {
             anyUser: false,
             anyPass: false,
             passWrong: false,
+            loading: false,
         };
         this.loginAction = this.loginAction.bind(this);
         this.userChange = this.userChange.bind(this);
@@ -51,21 +51,22 @@ class Login extends React.Component {
     }
 
     userChange(e){
-        this.setState({user: e.target.value});
+        this.setState({user: e.target.value, passWrong: false});
     }
 
     passwordChange(e){
-        this.setState({pass: e.target.value});
+        this.setState({pass: e.target.value, passWrong: false});
     }
 
     loginAction(e){
         e.preventDefault();
+
         if(this.state.user === '' || this.state.pass === ''){
             this.state.user === '' ? this.setState({anyUser: true}) : this.setState({anyUser: false});
             this.state.pass  === '' ? this.setState({anyPass: true})  : this.setState({anyPass: false});
         }
         else{
-            this.setState({anyUser: false, anyPass: false});
+            this.setState({anyUser: false, anyPass: false, loading: true});
 
             let currentComponent = this;
             let url = new URL("http://127.0.0.1:8000/login/");
@@ -113,12 +114,20 @@ class Login extends React.Component {
                 console.log(texto);
                 var jsonText = JSON.parse(texto);
                 Cookies.set("tokenId", jsonText['tokenId'], { expires: 1});
+                Cookies.set("typeUser", jsonText['typeUser'], { expires: 1});
+                localStorage.setItem('typeUser', jsonText['typeUser']);
+
+                
+
+                currentComponent.props.reciveState(jsonText['username'], jsonText['typeUser']);
 
                 auth.login(() => {
-                    currentComponent.props.history.push("/admin");
+                    currentComponent.props.history.push("/");
                 });
             }).catch(function(err) {
                 console.log(err);
+                currentComponent.setState({loading: false, passWrong: true})
+
             });
         }
     }
@@ -207,7 +216,7 @@ class Login extends React.Component {
                                                 </label>
                                             </div>
                                             <div className="text-center">
-                                                <Button className="mt-3" type="button" onClick={this.loginAction}>
+                                                <Button className="mt-3" type="button" onClick={this.loginAction} disabled={this.state.loading}>
                                                     Iniciar
                                                 </Button>
                                             </div>         

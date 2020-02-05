@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 //import SearchIcon from '@material-ui/icons/Search';
 //import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import logo from '../../assets/img/logos/barco6x6.svg';
-
 // JavaScript plugin that hides or shows a component based on your scroll
 import Headroom from "headroom.js";
+
 
 import auth from "../../auth";
 
@@ -33,7 +33,6 @@ import {
 class Header extends React.Component{
     constructor(props){
         super(props);
-        this.state = {}
         this.logoutAction = this.logoutAction.bind(this);
     }
 
@@ -46,11 +45,16 @@ class Header extends React.Component{
     logoutAction(e){
         console.log('cerrar sesión');
         auth.logout();
+        this.props.reciveState('','');
     }
 
+    //componentWillReceiveProps(next_props) {
+    //    this.setState({ loading: true });
+    //}
+
     render() {
-        const user = false;
-        const admin = false;
+        const admin = this.props.typeUser;
+        const authUser = this.props.logueado;
 
         return (
           <>
@@ -99,7 +103,7 @@ class Header extends React.Component{
                                 <span className="nav-link-inner--text">Datos</span>
                             </NavLink>
                         </NavItem>
-                        { user &&
+                        { authUser &&
                             <NavItem>
                                 <NavLink tag={Link} to="/observacion/" className="Observaciones">
                                     <i className="fa fa-sticky-note d-lg-none mr-1" />
@@ -119,23 +123,27 @@ class Header extends React.Component{
                                 <i className="ni ni-circle-08" />
                             </DropdownToggle>
                             <DropdownMenu>
-                                { user &&
+                                { authUser &&
                                     <DropdownItem to="/profile/" tag={Link}>
                                         Perfil
                                     </DropdownItem>
                                 }
-                                <DropdownItem to="/login/" tag={Link}>
-                                    Iniciar sesión
-                                </DropdownItem>
-                                <DropdownItem to="/register/" tag={Link}>
-                                    Registrarse
-                                </DropdownItem>
+                                { !admin && 
+                                    <DropdownItem to="/login/" tag={Link}>
+                                        Iniciar sesión
+                                    </DropdownItem>
+                                }
+                                { !admin && 
+                                    <DropdownItem to="/register/" tag={Link}>
+                                        Registrarse
+                                    </DropdownItem>
+                                }
                                 { admin && 
                                     <DropdownItem to="/admin/" tag={Link}>
                                         DashBoard
                                     </DropdownItem>
                                 }
-                                { user ||
+                                { authUser &&
                                     <>
                                         <DropdownItem divider />
                                         <DropdownItem to="/" tag={Link} onClick={this.logoutAction}>

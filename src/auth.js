@@ -12,6 +12,7 @@ class Auth {
     logout(/*cb*/) {
       this.authenticated = false;
       localStorage.removeItem('myData');
+      localStorage.removeItem('typeUser');
       //cb();
     }
   
