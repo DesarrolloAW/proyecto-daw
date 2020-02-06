@@ -6,7 +6,15 @@ import perfil from '../../assets/img/team-4-800x800.jpg'
 class Profile extends React.Component{
     constructor(props){
         super(props);
-        this.state = {observaciones : {},}
+        this.state = {
+            observaciones : {},
+            nombre: '',
+            apellido: '',
+            idUser: 0,
+            email: '',
+            institucion: '',
+            provincia: '',
+        }
     }
 
     componentDidMount() {
@@ -19,13 +27,19 @@ class Profile extends React.Component{
         .then(res => this.setState({observaciones: res}))
         .catch(() => this.setState({ observaciones: {} }));
         
+        this.setState({
+            nombre: 'nombre',
+            apellido: 'apellido',
+            idUser: 0,
+            email: 'correo@correo.com',
+            institucion: 'Unidad',
+            provincia: 'Guayas'
+        })
     }
 
     render(){
-        let observaciones = this.state.observaciones;
-        const id = this.props.id;
-        const nombre = this.props.nombre;
-        const apellido = this.props.apellido;
+        const username = this.props.match.params.userName;
+        const { observaciones, nombre, apellido, idUser, email, institucion, provincia } = this.state;
 
         return(
             <main className="profile-page" ref="main">
@@ -71,19 +85,19 @@ class Profile extends React.Component{
                                 
                                 <div className="text-center mt-5">
                                     <h3>
-                                        {id} | {nombre} {apellido}
+                                        {idUser} | {nombre} {apellido} | {username}
                                     </h3>
                                     <div className="h6 font-weight-300">
                                         <i className="ni location_pin mr-2" />
-                                        Ciudad, Pais
+                                        {provincia}
                                     </div>
                                     <div className="h6 mt-4">
                                         <i className="ni business_briefcase-24 mr-2" />
-                                        Email
+                                        {email}
                                     </div>
                                     <div>
                                         <i className="ni education_hat mr-2" />
-                                        Institución
+                                        {institucion}
                                     </div>
                                 </div>
                                 

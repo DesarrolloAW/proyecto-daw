@@ -72,7 +72,7 @@ class Layout extends Component {
               <Route path='/desarrolladores' component={Desarrolladores}/>
 
               <ProtectedRoute exact path='/observacion' component={Observacion} />
-              <ProtectedRoute exact path='/profile/' component={Profile}/>
+              <ProtectedRoute exact path='/profile/:userName' component={Profile}/>
               <ProtectedRoute exact path="/admin" component={Admin} />
               
               <Route path="/error" component={() => "404 NOT FOUND"} />

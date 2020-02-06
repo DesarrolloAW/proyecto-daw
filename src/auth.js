@@ -13,6 +13,7 @@ class Auth {
       this.authenticated = false;
       localStorage.removeItem('myData');
       localStorage.removeItem('typeUser');
+      localStorage.removeItem('userName');
       //cb();
     }
   

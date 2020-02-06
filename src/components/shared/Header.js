@@ -22,8 +22,6 @@ import {
     NavLink,
     Nav,
     Container,
-    //Input,
-    //Media,
     Row,
     Col,
     //UncontrolledTooltip,
@@ -55,6 +53,7 @@ class Header extends React.Component{
     render() {
         const admin = this.props.typeUser;
         const authUser = this.props.logueado;
+        const username = localStorage.getItem('userName');
 
         return (
           <>
@@ -124,16 +123,16 @@ class Header extends React.Component{
                             </DropdownToggle>
                             <DropdownMenu>
                                 { authUser &&
-                                    <DropdownItem to="/profile/" tag={Link}>
-                                        Perfil
+                                    <DropdownItem to={`/profile/${username}`} tag={Link}>
+                                        {username}
                                     </DropdownItem>
                                 }
-                                { !admin && 
+                                { !authUser && 
                                     <DropdownItem to="/login/" tag={Link}>
                                         Iniciar sesión
                                     </DropdownItem>
                                 }
-                                { !admin && 
+                                { !authUser && 
                                     <DropdownItem to="/register/" tag={Link}>
                                         Registrarse
                                     </DropdownItem>

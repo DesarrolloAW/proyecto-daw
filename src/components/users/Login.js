@@ -29,8 +29,6 @@ import {
 class Login extends React.Component {
     constructor(props){
         super(props);
-
-
         this.state = {
             user: '', 
             pass: '',
@@ -40,8 +38,7 @@ class Login extends React.Component {
             loading: false,
         };
         this.loginAction = this.loginAction.bind(this);
-        this.userChange = this.userChange.bind(this);
-        this.passwordChange = this.passwordChange.bind(this);
+        this.changeHandler = this.changeHandler.bind(this);
     }
 
     componentDidMount() {
@@ -50,12 +47,8 @@ class Login extends React.Component {
         this.refs.main.scrollTop = 0;
     }
 
-    userChange(e){
-        this.setState({user: e.target.value, passWrong: false});
-    }
-
-    passwordChange(e){
-        this.setState({pass: e.target.value, passWrong: false});
+    changeHandler = e => {
+        this.setState({ [e.target.name]: e.target.value, passWrong: false});
     }
 
     loginAction(e){
@@ -104,8 +97,6 @@ class Login extends React.Component {
                 console.log(response.status, response.status === 201 )
                 if(response.ok) {
                     console.log('OK')
-                    //currentComponent.setState({redirect:true})
-
                     return response.text()
                 } else {
                     throw "Error en la llamada Ajax";
@@ -115,9 +106,9 @@ class Login extends React.Component {
                 var jsonText = JSON.parse(texto);
                 Cookies.set("tokenId", jsonText['tokenId'], { expires: 1});
                 Cookies.set("typeUser", jsonText['typeUser'], { expires: 1});
-                localStorage.setItem('typeUser', jsonText['typeUser']);
 
-                
+                localStorage.setItem('typeUser', jsonText['typeUser']);
+                localStorage.setItem('userName', jsonText['username']);
 
                 currentComponent.props.reciveState(jsonText['username'], jsonText['typeUser']);
 
@@ -169,7 +160,7 @@ class Login extends React.Component {
                                                             <FaceIcon/>
                                                         </InputGroupText>
                                                     </InputGroupAddon>
-                                                    <Input placeholder="Usuario" type="user" className="loginCuadro" onChange={this.userChange}/>
+                                                    <Input placeholder="Usuario" type="user" className="loginCuadro" name="user" onChange={this.changeHandler}/>
                                                 </InputGroup>
                                                 { this.state.anyUser &&
                                                     <div className="font-italic text-left">
@@ -188,7 +179,7 @@ class Login extends React.Component {
                                                             <HttpsOutlinedIcon/>
                                                         </InputGroupText>
                                                     </InputGroupAddon>
-                                                    <Input placeholder="Contraseña" type="password" autoComplete="off"className="loginCuadro" onChange={this.passwordChange}/>
+                                                    <Input placeholder="Contraseña" type="password" autoComplete="off"className="loginCuadro" name="pass" onChange={this.changeHandler}/>
                                                 </InputGroup>
                                                 { this.state.anyPass &&
                                                     <div className="font-italic text-left">
