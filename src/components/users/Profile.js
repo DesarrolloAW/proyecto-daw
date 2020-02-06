@@ -59,13 +59,16 @@ class Profile extends React.Component{
         const username = this.props.match.params.userName;
         var result = window.confirm("Desea eliminar esta observación?");
         if(result){
-            fetch("http://localhost:8000/borrar_observacion/"+this.props.match.params.userName,
+            fetch("http://localhost:8000/borrar_observacion/",
             {
                 method: 'DELETE',
-                body: JSON.stringify({id: idObservacion})
+                body: JSON.stringify(
+                    {id: idObservacion,
+                     username:this.props.match.params.userName,    
+                    })
             })
             .then(res => res.text())
-            .then(res => window.location.replace("http://localhost:3000/profile/"+this.state.idUser));
+            .then(res => window.location.replace("http://localhost:3000/profile/"+this.props.match.params.userName));
         }
     }
 
