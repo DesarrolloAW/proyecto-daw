@@ -22,23 +22,37 @@ class Profile extends React.Component{
         document.scrollingElement.scrollTop = 0;
         this.refs.main.scrollTop = 0;
 
-        fetch('https://cip-rrd.herokuapp.com/observaciones')
+        fetch('http://127.0.0.1:8000/get_usuario/?username='+this.props.match.params.userName)
         .then(res => res.json())
-        .then(res => this.setState({observaciones: res}))
-        .catch(() => this.setState({ observaciones: {} }));
+        .then(
+            res => {
+                this.setState(
+                { nombre: res.nombre,
+                apellido: res.apellido, 
+                email:res.email,
+                user:res.user,
+                idUser:res.id,
+                institucion:res.institucion
+                })
+            
         
+        })
+            
+        .catch(() => this.setState({}));
+        console.log(JSON.stringify(this.state))
+       
         this.setState({
-            nombre: 'nombre',
-            apellido: 'apellido',
-            idUser: 0,
-            email: 'correo@correo.com',
-            institucion: 'Unidad',
             provincia: 'Guayas'
         })
     }
 
     render(){
+        
         const username = this.props.match.params.userName;
+        if(username==this.state.user){
+
+            
+        }
         const { observaciones, nombre, apellido, idUser, email, institucion, provincia } = this.state;
 
         return(
