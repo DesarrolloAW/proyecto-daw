@@ -220,8 +220,8 @@ class Estacion extends React.Component {
                 method: 'DELETE',
                 body: JSON.stringify({id: this.props.nid})
             })
-        .then(res => res.text())
-        .then(res => window.location.replace("http://localhost:3000/admin"));
+            .then(res => res.text())
+            .then(res => window.location.replace("http://localhost:3000/admin"));
         }
         
     }

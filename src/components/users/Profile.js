@@ -2,6 +2,7 @@ import React from 'react'
 // reactstrap components
 import { Card, Container, Row, Col, Button, Table, Pagination, PaginationItem, PaginationLink,} from "reactstrap";
 import perfil from '../../assets/img/team-4-800x800.jpg'
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class Profile extends React.Component{
     constructor(props){
@@ -15,6 +16,7 @@ class Profile extends React.Component{
             institucion: '',
             provincia: '',
         }
+        this.deleteObs = this.deleteObs.bind(this);
     }
 
     componentDidMount() {
@@ -47,11 +49,24 @@ class Profile extends React.Component{
         
         })
         .catch(() => this.setState({}));
-        console.log(JSON.stringify(this.state))
        
         this.setState({
             provincia: 'Guayas'
         })
+    }
+    
+    deleteObs(idObservacion){
+        const username = this.props.match.params.userName;
+        var result = window.confirm("Desea eliminar esta observación?");
+        if(result){
+            fetch("http://localhost:8000/borrar_observacion/"+this.props.match.params.userName,
+            {
+                method: 'DELETE',
+                body: JSON.stringify({id: idObservacion})
+            })
+            .then(res => res.text())
+            .then(res => window.location.replace("http://localhost:3000/profile/"+this.state.idUser));
+        }
     }
 
     render(){
@@ -131,7 +146,8 @@ class Profile extends React.Component{
                                                     <th scope="col">Época</th>
                                                     <th scope="col">Estación</th>
                                                     <th scope="col" className="text-center">Cant. mediciones</th>
-                                                    <th scope="col" className="text-right">Revisión</th>
+                                                    <th scope="col" className="text-center">Revisión</th>
+                                                    <th scope="col" className="text-right">Delete</th>
                                                     </tr>
                                                 </thead>
 
@@ -144,7 +160,12 @@ class Profile extends React.Component{
                                                                         <td>{observaciones[k].epoca}</td>
                                                                         <td>{observaciones[k].estacion.nombre}</td>
                                                                         <td className="text-center">{observaciones[k].mediciones.length}</td>
-                                                                        <td className="text-right">{observaciones[k].estado}</td>
+                                                                        <td className="text-center">{observaciones[k].estado}</td>
+                                                                        <td className="text-right"> 
+                                                                            <Button size="sm" onClick={() => this.deleteObs(parseInt(k,10))} value={parseInt(k,10)} >
+                                                                                <DeleteIcon/>
+                                                                            </Button>
+                                                                        </td>
                                                                     </tr>
                                                             )
                                                         })

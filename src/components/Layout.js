@@ -29,6 +29,8 @@ class Layout extends Component {
       type: '',
       tokenId: ''
     }
+    this.callBackLogout = this.callBackLogout.bind(this);
+    this.callBackLogin = this.callBackLogin.bind(this);
   }
 
   callBackLogin(reciveUserName, reciveType) {
@@ -56,7 +58,7 @@ class Layout extends Component {
       <>
         <Router>
           {/* Los link en Header y Footer obligan a tener todo dentro de Router */}
-          <Header logueado = {this.state.logueado} typeUser = {this.state.typeAdmin} reciveState = {this.callBackLogout.bind(this)}/>
+          <Header logueado = {this.state.logueado} typeUser = {this.state.typeAdmin} reciveState = {this.callBackLogout}/>
             {/* Y Router obliga a tener todos los Route dentro de una sola componente o grupo en este caso sección  */}
             {/* En otro caso podria estar todo esto en en index.js excepto header y footer, así la componente se 
             recibia por props como {this.props.children} */}
@@ -65,7 +67,7 @@ class Layout extends Component {
               <Route path='/datos' component={Datos} />
               <Route path='/contactanos' component={Contactanos} />
               <Route path='/nosotros' component={Nosotros} />
-              <Route exact path='/login' render = {(props) => <Login {...props} reciveState = {this.callBackLogin.bind(this)}/>}/>
+              <Route exact path='/login' render = {(props) => <Login {...props} reciveState = {this.callBackLogin}/>}/>
               <Route path='/register' component={Register}/>
               <Route path='/desarrolladores' component={Desarrolladores}/>
 
