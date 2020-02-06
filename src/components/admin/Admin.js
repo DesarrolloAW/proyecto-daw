@@ -47,6 +47,7 @@ class Admin extends React.Component{
             ],
             tabs: 1,
             stations: {},
+            station_id: null,
         };
     }
 
@@ -64,10 +65,12 @@ class Admin extends React.Component{
         this.setState(prevState => ({ stepsEnabled: !prevState.stepsEnabled }) );
     };
 
-    toggleNavs = (e, index) => {
+    toggleNavs = (e, index, id, id1) => {
         e.preventDefault();
         this.setState({
-            tabs: index
+            tabs: index,
+            station_id: id,
+            id: id1
         });
     };
 
@@ -198,7 +201,7 @@ class Admin extends React.Component{
                                                                     <i className="fa fa-search" aria-hidden="true"></i>
                                                                 </InputGroupText>
                                                             </InputGroupAddon>
-                                                            <Input className="form-control-alternative" placeholder="Buscar usuarios" type="text"
+                                                            <Input className="form-control-alternative" placeholder="Buscar estaciones" type="text"
                                                             onFocus={e => this.setState({ searchFocused: true })}  
                                                             onBlur={e => this.setState({ searchFocused: false })}
                                                             
@@ -231,7 +234,11 @@ class Admin extends React.Component{
                                                                     <td>{stations[k].name}</td>
                                                                     <td>{stations[k].coord.lat}</td>
                                                                     <td>{stations[k].coord.lng}</td>
-                                                                    <td className="text-center"><a href=""><i className="fa fa-eye" aria-hidden="true"></i></a></td>
+                                                                    <td className="text-center">
+                                                                        <a href="#pablo" onClick={e => this.toggleNavs(e, 5, stations[k].id, stations[k]._id)}>
+                                                                            <i className="fa fa-eye" aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -274,6 +281,9 @@ class Admin extends React.Component{
                                                 <div className="row" >
                                                     Cuarto
                                                 </div>
+                                            </TabPane>
+                                            <TabPane tabId="tabs5">
+                                                <Estacion oid={this.state.station_id} nid={this.state.id}/>
                                             </TabPane>
                                         </TabContent>
                                     </div>

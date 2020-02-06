@@ -31,11 +31,15 @@ class Estacion extends React.Component {
         this.prov = React.createRef();
         this.cant = React.createRef();
         this.parr = React.createRef();
+        this.nombre = React.createRef();
+        this.img = React.createRef();
         this.state = {
             mapa: {},
             isLoad: false,
             provs: {},
-            provLoad: false
+            provLoad: false,
+            station: {},
+            statload: false,
         }
         this.hide = this.hide.bind(this);
         this.show = this.show.bind(this);
@@ -48,6 +52,11 @@ class Estacion extends React.Component {
         .then(res => res.json())
         .then(res => this.setState({ provs: res, provLoad: true }))
         .catch(() => this.setState({ isLoad: false }));
+        this.setState({statload: false});
+    }
+
+    componentWillReceiveProps(){
+        this.setState({statload: false});
     }
 
     addMaker(lat, lng) {
@@ -125,9 +134,9 @@ class Estacion extends React.Component {
     }
 
     provChange(value){
-        var cantones = document.getElementById("EjemploCanton");
+        var cantones = this.cant.current;
         cantones.innerHTML = "";
-        var parroquias = document.getElementById("EjemploParroquia");
+        var parroquias = this.parr.current;
         parroquias.innerHTML = "";
         var op = document.createElement("option");
         op.value = "0";
@@ -141,11 +150,12 @@ class Estacion extends React.Component {
                 option.text = cants[c];
                 cantones.appendChild(option);
             }
+            this.cant.current.value = this.state.station.canton || "0";
         });
     }
 
     cantChange(value){
-        var parroquias = document.getElementById("EjemploParroquia");
+        var parroquias = this.parr.current;
         parroquias.innerHTML = "";
         var op = document.createElement("option");
         op.value = "0";
@@ -159,10 +169,68 @@ class Estacion extends React.Component {
                 option.text = parrs[p];
                 parroquias.appendChild(option);
             }
-        })
+            this.parr.current.value = this.state.station.parroquia || "0";
+        });
+    }
+
+    loadForm(){
+        if(!this.state.statload){
+            fetch('http://localhost:8000/estacion/?id_estacion='+this.props.oid)
+            .then(res => res.json())
+            .then(res => {
+                this.setState({station: res, statload: true})
+                this.prov.current.value = this.state.station.provincia;
+                this.img.current.value = this.state.station.img;
+                this.nombre.current.value = this.state.station.nombre;
+                this.lat.current.value = this.state.station.lat;
+                this.lng.current.value = this.state.station.lng;
+                this.provChange(this.state.station.provincia);
+                this.cantChange(this.state.station.canton);
+                this.addMaker(this.state.station.lat, this.state.station.lng);
+            })
+            .catch(() => this.setState({statload: false}));
+            
+        }
+    }
+
+    update = (e) => {
+        e.preventDefault();
+        var data = new Object();
+        data.nombre = this.nombre.current.value;
+        data.latitud = this.lat.current.value;
+        data.longitud = this.lng.current.value;
+        data.parroquia = this.parr.current.value;
+        data.img = this.img.current.value;
+        data.id = this.props.nid;
+        fetch("http://localhost:8000/actualizar_estacion/"+this.props.oid,
+            {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            }
+        ).then(res => res.text())
+        .then(res => console.log(res));
+    }
+
+    delete = (e) => {
+        e.preventDefault();
+        var result = window.confirm("Desea eliminar esta estación?\nTodas las observaciones de la estacion seran eliminadas");
+        if(result){
+            fetch("http://localhost:8000/borrar_estacion/"+this.props.oid,
+            {
+                method: 'DELETE',
+                body: JSON.stringify({id: this.props.nid})
+            })
+        .then(res => res.text())
+        .then(res => window.location.replace("http://localhost:3000/admin"));
+        }
+        
     }
 
     render() {
+        var id = this.props.oid;
+        if(id != null){
+            this.loadForm();
+        }        
         if (this.state.isLoad) {
             this.state.mapa.on("click", (e) => {
                 this.addMaker(e.lngLat.lat, e.lngLat.lng);
@@ -185,11 +253,11 @@ class Estacion extends React.Component {
                         <span />
                         <span />
                     </div>
-                    <Form action="http://localhost:8000/crear_estacion/" method="POST">
-                        <h3 className="text-center colorTitle"><strong>Registro de Estación</strong></h3>
+                    <Form action="http://localhost:8000/crear_estacion/" method="POST" id="formulario">
+                        <h3 className="text-center colorTitle">{id == null? <strong>Registro de Estación</strong>: <strong>Modificar Estación ({id})</strong>}</h3>
                         <FormGroup>
                             <Label for="EjemploNombre">Nombre</Label>
-                            <input type="text" className="form-control" name="nombre" id="EjemploNombre" placeholder="Escriba el nombre" />
+                            <input type="text" className="form-control" ref={this.nombre} name="nombre" id="EjemploNombre" placeholder="Escriba el nombre" />
                         </FormGroup>
                         <Row>
                             <Col>
@@ -244,7 +312,7 @@ class Estacion extends React.Component {
                             <div className="container-fluid col-md-6 col-sm-12">
                                 <FormGroup>
                                     <Label for="EjemploParroquia">Parroquia</Label>
-                                    <select className="form-control" ref={this.parr} name="parroquia" id="EjemploParroquia" placeholder="Escoga la parroquia" >
+                                    <select className="form-control" ref={this.parr} name="parroquia" id="EjemploParroquia" placeholder="Escoga la parroquia">
 
                                     </select>
                                 </FormGroup>
@@ -252,9 +320,10 @@ class Estacion extends React.Component {
                         </Row>
                         <FormGroup>
                             <Label for="EjemploImagen">Foto estacion (URL)</Label>
-                            <input type="text" className="form-control" name="img" id="EjemploImagen" placeholder="Imagen (URL)" />
+                            <input type="text" className="form-control" ref={this.img} name="img" id="EjemploImagen" placeholder="Imagen (URL)"/>
                         </FormGroup>
-                        <Button>Guardar</Button>
+                        {id == null ? <Button>Guardar</Button> :
+                        <div><Button onClick={e => this.update(e)}>Guardar</Button>    <Button onClick={e => this.delete(e)}>Eliminar</Button></div>}
                         <p></p>
                         <p></p>
                         <p></p>
