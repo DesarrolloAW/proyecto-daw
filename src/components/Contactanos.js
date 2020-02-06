@@ -60,6 +60,7 @@ class Contactanos extends React.Component {
             console.log('OK')
             return response.text()
         } else {
+            // eslint-disable-next-line no-throw-literal
             throw "Error en la llamada Ajax";
         }
       }).then(function(texto) {
@@ -71,13 +72,6 @@ class Contactanos extends React.Component {
       }).catch(function(err) {
           console.log(err);
       });
-      //useSnackbar('This is a success message!', 'success');
-      /*
-        <Alert severity="success">
-          <AlertTitle>Success</AlertTitle>
-          This is a success alert — check it out!
-        </Alert>
-      */
     }
 
     componentWillUnmount() {

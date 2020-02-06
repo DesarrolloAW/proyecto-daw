@@ -22,6 +22,15 @@ class Profile extends React.Component{
         document.scrollingElement.scrollTop = 0;
         this.refs.main.scrollTop = 0;
 
+        let url = 'http://127.0.0.1:8000/misobs/?username='+this.props.match.params.userName
+        fetch(url)
+        .then(res => res.text())
+        .then(res =>  {
+            let resp = JSON.parse(res)
+            this.setState({observaciones: resp})
+        })
+        .catch(() => this.setState({ observaciones: {} }));
+
         fetch('http://127.0.0.1:8000/get_usuario/?username='+this.props.match.params.userName)
         .then(res => res.json())
         .then(
@@ -37,7 +46,6 @@ class Profile extends React.Component{
             
         
         })
-            
         .catch(() => this.setState({}));
         console.log(JSON.stringify(this.state))
        
@@ -47,12 +55,7 @@ class Profile extends React.Component{
     }
 
     render(){
-        
         const username = this.props.match.params.userName;
-        if(username==this.state.user){
-
-            
-        }
         const { observaciones, nombre, apellido, idUser, email, institucion, provincia } = this.state;
 
         return(
@@ -134,20 +137,17 @@ class Profile extends React.Component{
 
                                                 <tbody id="tabla">
                                                     { Object.keys(observaciones).map(k => {
-                                                        if(observaciones[k].observador.localeCompare('Steven Araujo') === 0)
-                                                            return(  <tr key={"row" + k}>
-                                                                        <th scope="row">{parseInt(k,10)+1}</th>
+                                                        return(     <tr key={"row" + k}>
+                                                                        <th scope="row">{parseInt(k,10)}</th>
                                                                         <td>{observaciones[k].observador}</td>
                                                                         <td>{observaciones[k].fase_lunar}</td>
-                                                                        <td>{'Verano'}</td>
+                                                                        <td>{observaciones[k].epoca}</td>
                                                                         <td>{observaciones[k].estacion.nombre}</td>
                                                                         <td className="text-center">{observaciones[k].mediciones.length}</td>
-                                                                        <td className="text-right">{parseInt(k,10)%2 === 0 ? 'True': 'False'}</td>
+                                                                        <td className="text-right">{observaciones[k].estado}</td>
                                                                     </tr>
                                                             )
-                                                        else
-                                                            return ''
-                                                    })
+                                                        })
                                                     }
                                                 </tbody>
                                             </Table>

@@ -99,6 +99,7 @@ class Login extends React.Component {
                     console.log('OK')
                     return response.text()
                 } else {
+                    // eslint-disable-next-line no-throw-literal
                     throw "Error en la llamada Ajax";
                 }
             }).then(function(texto) {

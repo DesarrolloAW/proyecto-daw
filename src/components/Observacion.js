@@ -2,6 +2,7 @@ import React from "react";
 import ReactDatetime from "react-datetime";
 import classnames from 'classnames';
 import "../assets/css/obs.css";
+
 // reactstrap components
 import {
 	Card,
@@ -152,6 +153,7 @@ class Observacion extends React.Component {
 			  console.log('OK')
 			  return response.text()
 		  } else {
+			  // eslint-disable-next-line no-throw-literal
 			  throw "Error en la llamada Ajax";
 		  }
 		}).then(function(texto) {
@@ -420,7 +422,7 @@ class Observacion extends React.Component {
 													<label class="med" id="period"></label>
 												</div>
 												<div class="col text-right">
-													<img height="20" id="delete" src="https://image.flaticon.com/icons/svg/149/149343.svg" />
+													<img height="20" id="delete" alt="eliminar" src="https://image.flaticon.com/icons/svg/149/149343.svg" />
 												</div>
 											</div>
 										</div>
@@ -491,7 +493,7 @@ class Observacion extends React.Component {
 														<div class="col-md-15">
 															<button class="btn btn-secondary" id="show" type="button">
 																<span>
-																	<img width="30" src="https://image.flaticon.com/icons/svg/854/854878.svg" />
+																	<img width="30" alt="mapa" src="https://image.flaticon.com/icons/svg/854/854878.svg" />
 																</span>
 															</button>
 														</div>
@@ -752,8 +754,10 @@ class Observacion extends React.Component {
 														<div class="col-md-15">
 															<div class="error"></div>
 														</div>
+
+														
 														<Button className="mt-3" type="Submit" >
-																	Enviar
+															Enviar
 														</Button>
 													</div>
 												</div>

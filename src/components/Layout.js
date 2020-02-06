@@ -18,8 +18,6 @@ import Admin from './admin/Admin';
 import ProtectedRoute from '../protectedRoute';
 
 class Layout extends Component {
-  //static displayName = Layout.name;
-  // eslint-disable-next-line no-useless-constructor
   constructor(props){
     super(props);
     this.state = {

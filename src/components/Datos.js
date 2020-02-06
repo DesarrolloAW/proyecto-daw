@@ -323,7 +323,7 @@ class Datos extends React.Component {
                 var d = 0;
                 var iz = 0;
                 for(var med in newDat[i].mediciones){
-                    if(newDat[i].mediciones[med].corriente_del_litoral["direccion"] == "D")
+                    if(newDat[i].mediciones[med].corriente_del_litoral["direccion"] === "D")
                         d += 1;
                     else
                         iz += 1;

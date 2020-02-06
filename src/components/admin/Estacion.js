@@ -292,6 +292,7 @@ class Estacion extends React.Component {
                                     <div id="controls">
                                         <ZoomControl />
                                         <img
+                                            alt="ubicación"
                                             id="locate"
                                             src="https://osl.ugr.es/CTAN/graphics/asymptote/GUI/res/icons/android-locate.svg"
                                             onClick={() => this.geoLocate(this.props)} />
