@@ -7,6 +7,7 @@ import StepperUsuario from './StepperUsuario';
 
 import { Steps, Hints } from 'intro.js-react';
 import 'intro.js/introjs.css';
+import Geografia from './Geografia';
 
 
 class Admin extends React.Component{
@@ -169,7 +170,7 @@ class Admin extends React.Component{
                                                 
                                                 <div className="pl-2">
                                                     <a className="text-info" href="#pablo" onClick={e => this.toggleNavs(e, 4)}>
-                                                        Resumenes
+                                                        Geografía
                                                     </a>
                                                 </div>
                                             </div>
@@ -278,9 +279,7 @@ class Admin extends React.Component{
                                             </TabPane>
                                         
                                             <TabPane tabId="tabs4">
-                                                <div className="row" >
-                                                    Cuarto
-                                                </div>
+                                                <Geografia name="Provincias" child="provincia"></Geografia>
                                             </TabPane>
                                             <TabPane tabId="tabs5">
                                                 <Estacion oid={this.state.station_id} nid={this.state.id}/>
